@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="script.js"></script>
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #resume-container, #resume-container * {
+                visibility: visible;
+            }
+            #resume-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-start p-6">
+
+    <!-- 🔷 Container for Form & Resume Preview Side by Side -->
+    <div class="flex w-full max-w-6xl mx-auto gap-6">
+        
+        <!-- 📝 Form for Resume Input -->
+        <form id="resume-form" class="bg-white p-6 rounded-lg shadow-md w-1/2">
+            <h2 class="text-xl font-bold mb-4">Fill Your Details</h2>
+            
+            <label class="block">Profile Picture</label>
+            <input type="file" id="profile-pic-input" class="mb-3">
+
+            <label class="block">Name</label>
+            <input type="text" name="name" class="border p-2 w-full mb-3" >
+
+            <label class="block">Job Title</label>
+            <input type="text" name="job-title" class="border p-2 w-full mb-3" >
+
+            <label class="block">Location</label>
+            <input type="text" name="location" class="border p-2 w-full mb-3">
+
+            <label class="block">Email</label>
+            <input type="email" name="email" class="border p-2 w-full mb-3">
+
+            <label class="block">LinkedIn</label>
+            <input type="text" name="linkedin" class="border p-2 w-full mb-3">
+
+            <label class="block">Phone</label>
+            <input type="text" name="phone" class="border p-2 w-full mb-3">
+
+            <label class="block">Professional Summary</label>
+            <textarea name="summary" class="border p-2 w-full mb-3"></textarea>
+
+            <label class="block">Experience</label>
+            <textarea name="experience" class="border p-2 w-full mb-3"></textarea>
+
+            <label class="block">Education</label>
+            <textarea name="education" class="border p-2 w-full mb-3"></textarea>
+
+            <label class="block">Projects</label>
+            <textarea name="projects" class="border p-2 w-full mb-3"></textarea>
+
+            <label class="block">Skills</label>
+            <textarea name="skills" class="border p-2 w-full mb-3"></textarea>
+
+            <label class="block">Certifications</label>
+            <textarea name="certifications" class="border p-2 w-full mb-3"></textarea>
+
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Generate Resume</button>
+        </form>
+
+        <!-- 🎨 Resume Preview (Initially Hidden) -->
+        <div id="resume-container" class="hidden w-1/2 bg-white shadow-lg rounded-lg p-6 border border-gray-300">
+            <div class="grid grid-cols-5">
+                
+                <!-- Sidebar -->
+                <aside class="col-span-2 bg-gradient-to-b from-white to-red-800 text-white p-6">
+                    <img id="profile-pic-preview" src="https://via.placeholder.com/150" class="w-32 h-32 my-4 shadow-2xl rounded-full border-4 border-white" alt="Profile Picture">
+                    
+                    <h1 id="display-name" class="text-xl  font-bold mt-2">John Doe</h1>
+                    <p id="display-job-title" class="text-lg text-red-700 font-semibold border-b">Software Developer</p>
+                    <p id="display-location" class="text-md">📍 Location</p>
+                    <p id="display-email" class="text-md">📧 Email</p>
+                    <p id="display-linkedin" class="text-md">🔗 LinkedIn</p>
+                    <p id="display-phone" class="text-md">📞 Phone</p>
+
+                    <h2 class="text-lg font-semibold border-b mt-4">Skills</h2>
+                    <p id="display-skills" class="text-gray-200"></p>
+
+                    <h2 class="text-lg font-semibold border-b mt-4">Certifications</h2>
+                    <p id="display-certifications" class="text-gray-200"></p>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="col-span-3 p-6">
+                    <h2 class="text-xl font-semibold text-red-700">Professional Summary</h2>
+                    <p id="display-summary" class="text-gray-700"></p>
+
+                    <h2 class="text-xl font-semibold text-red-700 mt-4">Experience</h2>
+                    <p id="display-experience" class="text-gray-700"></p>
+
+                    <h2 class="text-xl font-semibold text-red-700 mt-4">Education</h2>
+                    <p id="display-education" class="text-gray-700"></p>
+
+                    <h2 class="text-xl font-semibold text-red-700 mt-4">Projects</h2>
+                    <p id="display-projects" class="text-gray-700"></p>
+                </main>
+            </div>
+
+            <button id="print-button" class="bg-green-500 text-white px-4 py-2 rounded mt-4">Print Resume</button>
+        </div>
+
+    </div>
+    
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.3/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
+
+</body>
+</html>
