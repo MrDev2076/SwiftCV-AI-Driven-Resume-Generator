@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin - User List</title>
-  <link rel="icon" href="https://icons.veryicon.com/png/o/education-technology/artificial-intelligence-2/mtsai-video-ai.png" />
+  <link rel="icon" href="https://novoresume.com/images/media_kit/colorful-simple-logo.png" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <style>
     .card{
       background-image: linear-gradient(60deg, #29323c 0%, #485563 100%);
@@ -15,18 +16,18 @@
 <body class="bg-gray-100 text-dark">
 
   <!-- Navbar -->
-  <nav class="bg-blue-900 p-4 shadow-md">
-    <div class="max-w-screen-xl px-16 mx-auto flex justify-between items-center">
-      <h1 class="text-white text-2xl font-semibold"><a href="/" class="text-white">Video Verese</a></h1>
+  <nav class="p-4 bg-blue-900 shadow-md">
+    <div class="flex items-center justify-between max-w-screen-xl px-16 mx-auto">
+      <h1 class="text-2xl font-semibold text-white"><a href="/" class="text-white">SwiftCv - Resume Builder</a></h1>
       <div class="flex space-x-4">
-        <a href="/" class="text-white text-sm duration-300 ease-in-out hover:bg-yellow-500 px-4 py-2 rounded">Home</a>
-        <a href="/profile" class="text-white text-sm   duration-300 ease-in-out hover:bg-yellow-500 px-4 py-2 rounded">Profile</a>
-        <a href="/view-analytics" class="text-white  text-sm  duration-300 ease-in-out hover:bg-yellow-500 px-4 py-2 rounded">Analytics</a>
+        <a href="/" class="px-4 py-2 text-sm text-white duration-300 ease-in-out rounded hover:bg-yellow-500">Home</a>
+        <a href="/profile" class="px-4 py-2 text-sm text-white duration-300 ease-in-out rounded hover:bg-yellow-500">Profile</a>
+        <!--a href="/view-analytics" class="px-4 py-2 text-sm text-white duration-300 ease-in-out rounded hover:bg-yellow-500">Analytics</a-->
         <% if (user && user.role !== 'user') { %>  
-          <a href="/admin" class="text-white text-sm border-b  duration-300 ease-in-out hover:text-yellow-400 px-4 py-2 rounded">⚡Admin Dashboard </a>
+          <a href="/admin" class="px-4 py-2 text-sm text-white duration-300 ease-in-out border-b rounded hover:text-yellow-400">⚡Admin Dashboard </a>
        <% } %>
         
-       <a href="/logout" class="text-white text-sm duration-300 ease-in-out hover:bg-red-500 px-4 py-2 rounded">Logout</a>
+       <a href="/logout" class="px-4 py-2 text-sm text-white duration-300 ease-in-out rounded hover:bg-red-500">Logout</a>
       </div>
     </div>
   </nav>
@@ -35,24 +36,24 @@
 
   <!-- Admin Section: User List -->
   <section class="max-w-screen-xl px-20 py-10 mx-auto">
-    <h1 class="text-3xl font-semibold mb-8 text-gray-800">Admin - User List</h1>
+    <h1 class="mb-8 text-3xl font-semibold text-gray-800">Admin - User List</h1>
   
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
       <% users.forEach(user => { %>
-        <div class="bg-blue-100 rounded-lg shadow-md p-6 flex justify-between items-center card">
+        <div class="flex items-center justify-between p-6 bg-blue-100 rounded-lg shadow-md card">
           <div> 
-            <h2 class="text-2xl font-semibold text-white mb-4"><%= user.name %></h2>
+            <h2 class="mb-4 text-2xl font-semibold text-white"><%= user.name %></h2>
             <ul class="text-yellow-200">
-              <li><span class="text-gray-100 font-semibold">Email:</span> <%= user.email %></li>
-              <li><span class="text-gray-100 font-semibold">Phone:</span> <%= user.phone %></li>
-              <li><span class="text-gray-100 font-semibold">Role:</span> <%= user.role %></li>
-              <li><span class="text-gray-100 font-semibold">Gender:</span> <%= user.gender %></li>
-              <li><span class="text-gray-100 font-semibold">Location:</span> <%= user.location %></li>
+              <li><span class="font-semibold text-gray-100">Email:</span> <%= user.email %></li>
+              <li><span class="font-semibold text-gray-100">Phone:</span> <%= user.phone %></li>
+              <li><span class="font-semibold text-gray-100">Role:</span> <%= user.role %></li>
+              <li><span class="font-semibold text-gray-100">Gender:</span> <%= user.gender %></li>
+              <li><span class="font-semibold text-gray-100">Location:</span> <%= user.location %></li>
             </ul>
           </div>
           
           <!-- Analytics -->
-          <div class="relative w-36 h-36 mt-6 mx-auto">
+          <div class="relative mx-auto mt-6 w-36 h-36">
             
           </div>
   

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Prep Guide for Students</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="container px-4 py-6 mx-auto">
+            <div class="flex items-center justify-between">
+                <nav>
+                    <ul class="flex space-x-6">
+                        <li><a href="#resume" class="text-gray-600 transition-all hover:text-indigo-600">Resume</a></li>
+                        <li><a href="#interview" class="text-gray-600 transition-all hover:text-indigo-600">Interview</a></li>
+                        <li><a href="#tips" class="text-gray-600 transition-all hover:text-indigo-600">Tips</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-16 bg-gradient-to-r from-indigo-50 to-blue-50">
+        <div class="container px-4 mx-auto text-center">
+            <h2 class="mb-4 text-3xl font-bold text-gray-800 md:text-4xl">Master Your Career Preparation</h2>
+            <p class="max-w-2xl mx-auto mb-8 text-lg text-gray-600">Essential tips for students to craft winning resumes and ace interviews. <br> Click start to create your resume</p>
+            <button id="cta-btn" class="px-6 py-2 font-medium text-white transition-all bg-indigo-600 rounded-full shadow-md hover:bg-indigo-700">
+                <a href="/generate">Getting Started</a>
+     
+            </button>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container px-4 py-12 mx-auto">
+        <!-- Section 1: Resume Preparation -->
+        <section id="resume" class="mb-20 fade-in">
+            <div class="flex flex-col items-center gap-8 lg:flex-row">
+                <div class="lg:w-1/2">
+                    <img src="https://images.shiksha.com/mediadata/images/articles/1716964591phpMHU90Q.jpeg" 
+                         alt="Resume preparation" 
+                         class="object-cover w-full h-auto rounded-lg shadow-md">
+                </div>
+                <div class="lg:w-1/2">
+                    <h2 class="mb-4 text-2xl font-bold text-gray-800 md:text-3xl">Crafting a Winning Resume</h2>
+                    <div class="space-y-4 text-gray-600">
+                        <div class="flex items-start">
+                            <div class="p-2 mt-1 mr-3 bg-indigo-100 rounded-full">
+                                <i class="text-indigo-600 fas fa-check"></i>
+                            </div>
+                            <p><strong class="text-gray-800">Keep it concise:</strong> Limit to one page for students/new graduates. Use clear, concise bullet points.</p>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="p-2 mt-1 mr-3 bg-indigo-100 rounded-full">
+                                <i class="text-indigo-600 fas fa-check"></i>
+                            </div>
+                            <p><strong class="text-gray-800">Tailor your resume:</strong> Customize for each job application by highlighting relevant coursework, projects, and skills.</p>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="p-2 mt-1 mr-3 bg-indigo-100 rounded-full">
+                                <i class="text-indigo-600 fas fa-check"></i>
+                            </div>
+                            <p><strong class="text-gray-800">Highlight achievements:</strong> Use action verbs and quantify results when possible (e.g., "Increased club membership by 30%").</p>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="p-2 mt-1 mr-3 bg-indigo-100 rounded-full">
+                                <i class="text-indigo-600 fas fa-check"></i>
+                            </div>
+                            <p><strong class="text-gray-800">Include relevant sections:</strong> Education, Experience, Skills, Projects, Leadership/Activities, and Honors/Awards.</p>
+                        </div>
+                    </div>
+                    <button class="px-4 py-2 mt-6 font-medium text-indigo-600 transition-all bg-white border border-indigo-600 rounded hover:bg-indigo-50">
+                        Download Resume Template
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Interview Preparation -->
+        <section id="interview" class="mb-20 fade-in">
+            <h2 class="mb-8 text-2xl font-bold text-center text-gray-800 md:text-3xl">Interview Preparation Guide</h2>
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <!-- Card 1 -->
+                <div class="p-6 transition-all bg-white rounded-lg shadow-md card-hover">
+                    <div class="flex items-center justify-center w-12 h-12 mb-4 bg-indigo-100 rounded-full">
+                        <i class="text-xl text-indigo-600 fas fa-search"></i>
+                    </div>
+                    <h3 class="mb-3 text-xl font-semibold text-gray-800">Research the Company</h3>
+                    <p class="text-gray-600">Understand the company's mission, values, products, and recent news. This shows genuine interest and helps you tailor your answers.</p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="p-6 transition-all bg-white rounded-lg shadow-md card-hover">
+                    <div class="flex items-center justify-center w-12 h-12 mb-4 bg-indigo-100 rounded-full">
+                        <i class="text-xl text-indigo-600 fas fa-comments"></i>
+                    </div>
+                    <h3 class="mb-3 text-xl font-semibold text-gray-800">Practice Common Questions</h3>
+                    <p class="text-gray-600">Prepare answers for "Tell me about yourself," "Why this company/role?" and "What are your strengths/weaknesses?" Use the STAR method for behavioral questions.</p>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="p-6 transition-all bg-white rounded-lg shadow-md card-hover">
+                    <div class="flex items-center justify-center w-12 h-12 mb-4 bg-indigo-100 rounded-full">
+                        <i class="text-xl text-indigo-600 fas fa-user-tie"></i>
+                    </div>
+                    <h3 class="mb-3 text-xl font-semibold text-gray-800">Dress Appropriately</h3>
+                    <p class="text-gray-600">When in doubt, dress more formally. For virtual interviews, ensure good lighting, a clean background, and test your technology beforehand.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Additional Tips -->
+        <section id="tips" class="fade-in">
+            <div class="overflow-hidden bg-white shadow-md rounded-xl">
+                <div class="md:flex">
+                    <div class="p-8 md:w-1/2">
+                        <h2 class="mb-4 text-2xl font-bold text-gray-800 md:text-3xl">Pro Tips for Students</h2>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <div class="p-2 mr-3 bg-indigo-100 rounded-full">
+                                    <i class="text-indigo-600 fas fa-lightbulb"></i>
+                                </div>
+                                <span class="text-gray-600"><strong class="text-gray-800">Leverage student experiences:</strong> Class projects, group work, and extracurriculars can demonstrate skills when you lack professional experience.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="p-2 mr-3 bg-indigo-100 rounded-full">
+                                    <i class="text-indigo-600 fas fa-network-wired"></i>
+                                </div>
+                                <span class="text-gray-600"><strong class="text-gray-800">Network effectively:</strong> Attend career fairs, connect with alumni, and don't be afraid to reach out for informational interviews.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="p-2 mr-3 bg-indigo-100 rounded-full">
+                                    <i class="text-indigo-600 fas fa-question-circle"></i>
+                                </div>
+                                <span class="text-gray-600"><strong class="text-gray-800">Prepare questions:</strong> Asking thoughtful questions shows engagement. Ask about company culture, growth opportunities, or day-to-day responsibilities.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="p-2 mr-3 bg-indigo-100 rounded-full">
+                                    <i class="text-indigo-600 fas fa-envelope-open-text"></i>
+                                </div>
+                                <span class="text-gray-600"><strong class="text-gray-800">Follow up:</strong> Send thank-you emails within 24 hours, reiterating your interest and key points from the interview.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="md:w-1/2">
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" 
+                             alt="Students networking" 
+                             class="object-cover w-full h-full">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Newsletter -->
+    <section class="py-12 bg-indigo-50">
+        <div class="container max-w-2xl px-4 mx-auto text-center">
+            <h2 class="mb-2 text-2xl font-bold text-gray-800">Get More Career Tips</h2>
+            <p class="mb-6 text-gray-600">Subscribe to our newsletter for weekly career preparation advice</p>
+            <form class="flex flex-col justify-center gap-2 sm:flex-row">
+                <input type="email" placeholder="Your email address" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                <button type="submit" class="px-6 py-2 font-medium text-white transition-all bg-indigo-600 rounded-lg hover:bg-indigo-700">
+                    Subscribe
+                </button>
+            </form>
+        </div>
+    </section>
+
+
+
+    <script>
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // CTA button animation
+        const ctaBtn = document.getElementById('cta-btn');
+        ctaBtn.addEventListener('click', () => {
+            document.getElementById('resume').scrollIntoView({
+                behavior: 'smooth'
+            });
+            ctaBtn.classList.add('animate-pulse');
+            setTimeout(() => {
+                ctaBtn.classList.remove('animate-pulse');
+            }, 1000);
+        });
+
+        // Intersection Observer for fade-in animations
+        const fadeElements = document.querySelectorAll('.fade-in');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        fadeElements.forEach(element => {
+            element.classList.add('opacity-0');
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>

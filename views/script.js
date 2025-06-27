@@ -5,14 +5,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const resumeContainer = document.getElementById("resume-container");
     const printButton = document.getElementById("print-button");
 
-    // Function to initialize CKEditor for a given textarea
+    // Function to initialize CKEditor for textareas
     async function TextEditor(element) {
         return ClassicEditor.create(element, {
             toolbar: ['heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote']
         });
     }
 
-    // Initializing CKEditor for required fields
+    // Initialize CKEditor for specific fields
     let Experience, Education, Projects, Skills, Certifications;
 
     TextEditor(document.querySelector('[name="experience"]')).then(editor => { Experience = editor; });
@@ -33,31 +33,33 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Handle Form Submission & Update Resume
+    // Handle Form Submission & Prevent Page Reload
     form.addEventListener("submit", function (event) {
-        event.preventDefault();
+        event.preventDefault(); // Prevent default form submission behavior
+
         const formData = new FormData(form);
 
         document.getElementById("display-name").textContent = formData.get("name");
         document.getElementById("display-job-title").textContent = formData.get("job-title");
-        document.getElementById("display-location").textContent = `📍 ${formData.get("location")}`;
-        document.getElementById("display-email").textContent = ` ${formData.get("email")}`;
-        document.getElementById("display-linkedin").textContent = `🔗 ${formData.get("linkedin")}`;
-        document.getElementById("display-phone").textContent = `📞 ${formData.get("phone")}`;
-        document.getElementById("display-summary").textContent = formData.get("summary");
+        document.getElementById("display-location").textContent = "📍 " + formData.get("location");
+        document.getElementById("display-email").textContent = "📧 " + formData.get("email");
+        document.getElementById("display-linkedin").textContent = "🔗 " + formData.get("linkedin");
+        document.getElementById("display-phone").textContent = "📞 " + formData.get("phone");
 
-        // Get CKEditor content and set to display elements
+        document.getElementById("display-summary").innerHTML = formData.get("summary");
         document.getElementById("display-experience").innerHTML = Experience.getData();
         document.getElementById("display-education").innerHTML = Education.getData();
         document.getElementById("display-projects").innerHTML = Projects.getData();
         document.getElementById("display-skills").innerHTML = Skills.getData();
         document.getElementById("display-certifications").innerHTML = Certifications.getData();
 
-        // Show resume container after filling data
+        // Show resume section
         resumeContainer.style.display = "block";
+
+        // Smooth scroll to resume preview
+        resumeContainer.scrollIntoView({ behavior: "smooth" });
     });
 
-    // Print Resume
     printButton.addEventListener("click", function () {
         window.print();
     });

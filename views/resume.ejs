@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Generator</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .vertical-text {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+    .template-preview {
+      transition: all 0.3s ease;
+    }
+    .template-preview:hover {
+      transform: scale(1.02);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    @media print {
+      body {
+        background: white;
+      -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      #templateSelection, #generatedResume button {
+        display: none !important;
+      }
+      #generatedResume {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+    }
+    .progress-bar {
+      height: 6px;
+      background-color: #e5e7eb;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background-color: #4b2e2e;
+    }
+    .language-progress {
+      width: 60px;
+      height: 60px;
+    }
+    .language-progress circle {
+      fill: none;
+      stroke-width: 5;
+      stroke-linecap: round;
+    }
+    .language-progress-bg {
+      stroke: #e5e7eb;
+    }
+    .language-progress-fill {
+      stroke: #047857;
+      stroke-dasharray: 157;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
+  </style>
+</head>
+
+<body class="font-sans bg-gray-100">
+  <!-- Template Selection Screen -->
+  <div id="templateSelection" class="max-w-6xl px-4 py-10 mx-auto">
+    <h1 class="mb-8 text-3xl font-bold text-center">Select Your Resume Template</h1>
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <!-- Template 1 - Professional -->
+      <div class="overflow-hidden bg-white rounded-lg shadow-md cursor-pointer template-preview" onclick="selectTemplate('professional')">
+        <div class="flex items-center justify-center h-48 p-4 text-white" style="background-image: url('https://images.unsplash.com/photo-1499914485622-a88fac536970?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fHdvcmt8ZW58MHx8MHx8fDA%3D');background-size: cover;">
+          <h2 class="text-xl font-bold">Professional Template</h2>
+        </div>
+        <div class="p-4">
+          <p class="text-gray-600">Modern layout with vertical name styling</p>
+          <button class="w-full px-4 py-2 mt-3 text-white bg-blue-600 rounded hover:bg-blue-700">Select</button>
+        </div>
+      </div>
+      
+      <!-- Template 2 - Marketing -->
+      <div class="overflow-hidden bg-white rounded-lg shadow-md cursor-pointer template-preview" onclick="selectTemplate('marketing')">
+        <div class="flex items-center justify-center h-48 p-4 text-white" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVLddK3vDsAjTsapUQbZu76qJEnQSD3aDLAQ&s'); background-size: contain;">
+          <h2 class="text-xl font-bold text-white">Marketing Template</h2>
+        </div>
+        <div class="p-4">
+          <p class="text-gray-600">Clean layout with sidebar</p>
+          <button class="w-full px-4 py-2 mt-3 text-white bg-blue-600 rounded hover:bg-blue-700">Select</button>
+        </div>
+      </div>
+      
+      <!-- Template 3 - Mechanical Engineer -->
+      <div class="overflow-hidden bg-white rounded-lg shadow-md cursor-pointer template-preview" onclick="selectTemplate('mechanical')">
+        <div class="flex items-center justify-center h-48 p-4 text-white" style="background-image: url('https://img.freepik.com/premium-photo/person-drawing-mechanical-design-with-metal-parts-surrounding-them_239711-10172.jpg'); background-size: cover;">
+          <h2 class="text-xl font-bold text-black">Mechanical Engineer</h2>
+        </div>
+        <div class="p-4">
+          <p class="text-gray-600">Two-column layout with skills progress bars</p>
+          <button class="w-full px-4 py-2 mt-3 text-white bg-blue-600 rounded hover:bg-blue-700">Select</button>
+        </div>
+      </div>
+      
+      <!-- Template 4 - Doctor -->
+      <div class="overflow-hidden bg-white rounded-lg shadow-md cursor-pointer template-preview" onclick="selectTemplate('doctor')">
+        <div class="flex items-center justify-center h-48 p-4 text-white" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS82x4FQbHOJkiZbs8ciei6pqtSGq9HUH6XTg&s'); background-size: contain;">
+          <h2 class="text-xl font-bold">Doctor Template</h2>
+        </div>
+        <div class="p-4">
+          <p class="text-gray-600">Professional dark sidebar layout</p>
+          <button class="w-full px-4 py-2 mt-3 text-white bg-blue-600 rounded hover:bg-blue-700">Select</button>
+        </div>
+      </div>
+      
+      <!-- Template 5 - College Student -->
+      <div class="overflow-hidden bg-white rounded-lg shadow-md cursor-pointer template-preview" onclick="selectTemplate('college')">
+        <div class="flex items-center justify-center h-48 p-4 text-gray-800" style="background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20220201/pngtree-smiling-student-having-a-lot-to-read-store-indoor-pretty-photo-image_28970454.jpg'); background-size: cover;">
+          <h2 class="text-xl font-bold text-white">College Student</h2>
+        </div>
+        <div class="p-4">
+          <p class="text-gray-600">Simple table-based layout</p>
+          <button class="w-full px-4 py-2 mt-3 text-white bg-blue-600 rounded hover:bg-blue-700">Select</button>
+        </div>
+      </div>
+      
+      <!-- Template 6 - Copywriter -->
+      <div class="overflow-hidden bg-white rounded-lg shadow-md cursor-pointer template-preview" onclick="selectTemplate('copywriter')">
+        <div class="flex items-center justify-center h-48 p-4 text-gray-800" style="background-image: url('https://us.123rf.com/450wm/serezniy/serezniy2306/serezniy230600754/205904194-woman-typing-on-typewriter-with-eyeglasses-notebook-and-pen-on-black-background.jpg?ver=6');">
+          <h2 class="text-xl font-bold text-white">Copywriter Template</h2>
+        </div>
+        <div class="p-4">
+          <p class="text-gray-600">Creative two-column layout</p>
+          <button class="w-full px-4 py-2 mt-3 text-white bg-blue-600 rounded hover:bg-blue-700">Select</button>
+        </div>
+      </div>
+    </div>
+
+    <button onclick="localStorage.clear(); alert('All local data has been cleared!')" 
+        class="px-4 py-2 font-bold text-white bg-red-500 rounded hover:bg-red-700">
+        <a  href="/generate">Clear All Saved Data and Go Back</a>
+</button>
+  </div>
+
+  <!-- Generated Resume (Initially Hidden) -->
+  <div id="generatedResume" class="hidden max-w-5xl mx-auto">
+    <!-- Template 1 - Professional -->
+    <div id="professionalTemplate" class="hidden mt-8">
+      <div class="grid grid-cols-3">
+        <!-- Left Section -->
+        <div class="flex flex-col items-center col-span-1 px-2 py-8 text-white bg-black">
+          <h1 id="resumeName" class="text-4xl font-bold tracking-widest vertical-text">NAME<br>HERE</h1>
+          <p id="resumeTitle" class="mt-4 text-sm text-yellow-500 uppercase">Profession</p>
+
+          <div class="w-full px-4 mt-8 text-center">
+            <div class="mb-4">
+              <p class="text-sm text-gray-400 uppercase">Date of Birth</p>
+              <p id="resumeDob" class="mt-1 text-sm">Not specified</p>
+            </div>
+            
+            <div class="mb-4">
+              <p class="text-sm text-gray-400 uppercase">Phone</p>
+              <p id="resumePhone" class="mt-1">Not provided</p>
+            </div>
+            
+            <div class="mb-4">
+              <p class="text-sm text-gray-400 uppercase">Email</p>
+              <p id="resumeEmail" class="mt-1 text-sm break-all">Not provided</p>
+            </div>
+            
+            <div class="mb-4">
+              <p class="text-sm text-gray-400 uppercase">LinkedIn</p>
+              <p id="resumeLinkedin" class="mt-1 text-sm break-all">Not provided</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Section -->
+        <div class="col-span-2 p-8">
+          <!-- Profile -->
+          <div class="mb-6">
+            <h2 class="pb-2 mb-2 text-xl font-semibold border-b border-gray-300">PROFESSIONAL SUMMARY</h2>
+            <p id="resumeSummary" class="leading-relaxed text-gray-700">
+              Professional summary will appear here...
+            </p>
+          </div>
+
+          <!-- Education and Skills -->
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <h2 class="pb-2 mb-2 text-xl font-semibold border-b border-gray-300">EDUCATION</h2>
+              <div id="resumeEducation"></div>
+            </div>
+            <div>
+              <h2 class="pb-2 mb-2 text-xl font-semibold border-b border-gray-300">SKILLS</h2>
+              <div id="resumeSkills" class="flex flex-wrap gap-2"></div>
+            </div>
+          </div>
+
+          <!-- Languages -->
+          <div class="mt-6">
+            <h2 class="pb-2 mb-2 text-xl font-semibold border-b border-gray-300">LANGUAGES</h2>
+            <div id="resumeLanguages" class="flex flex-wrap gap-4"></div>
+          </div>
+
+          <!-- Experience -->
+          <div class="mt-8">
+            <h2 class="pb-2 mb-2 text-xl font-semibold border-b border-gray-300">PROFESSIONAL EXPERIENCE</h2>
+            <div id="resumeExperience" class="space-y-4"></div>
+          </div>
+          
+          <!-- Projects -->
+          <div class="mt-8">
+            <h2 class="pb-2 mb-2 text-xl font-semibold border-b border-gray-300">PROJECTS</h2>
+            <div id="resumeProjects" class="space-y-4"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Template 2 - Marketing -->
+    <div id="marketingTemplate" class="hidden mt-6">
+      <div class="grid grid-cols-1 md:grid-cols-3">
+        <!-- Sidebar -->
+        <aside class="flex flex-col items-center p-6 text-white bg-gray-900 md:min-h-full">
+          <div class="text-center">
+            <h1 id="marketingResumeName" class="text-3xl font-extrabold leading-tight">YOUR<br>NAME</h1>
+            <p id="marketingResumeTitle" class="mt-1 text-sm tracking-widest text-gray-300 uppercase">Profession</p>
+          </div>
+
+          <!-- Contact Info -->
+          <div class="w-full mt-6">
+            <h2 class="pb-1 mb-3 text-lg font-semibold border-b border-gray-700">Contact</h2>
+            <ul class="space-y-1 text-sm">
+              <li id="marketingResumePhone">📞 Phone not provided</li>
+              <li id="marketingResumeEmail">✉️ Email not provided</li>
+              <li id="marketingResumeLinkedin">🌐 LinkedIn not provided</li>
+            </ul>
+          </div>
+
+          <!-- Portfolio -->
+          <div class="w-full mt-6">
+            <h2 class="pb-1 mb-3 text-lg font-semibold border-b border-gray-700">Date of Birth</h2>
+            <p id="marketingResumeDob" class="text-sm">Not specified</p>
+          </div>
+              
+          <!-- Skills -->
+          <div>
+            <h2 class="p-3 pb-1 mt-4 mb-2 text-2xl font-bold text-gray-100 border-b-2 border-gray-200">Professional Skills</h2>
+            <ul id="marketingResumeSkills" class="ml-5 space-y-1 text-sm text-gray-300 list-disc"></ul>
+          </div>
+
+          <!-- Languages -->
+          <div>
+            <h2 class="p-3 pb-1 mt-4 mb-2 text-2xl font-bold text-gray-100 border-b-2 border-gray-200">Languages</h2>
+            <ul id="marketingResumeLanguages" class="ml-5 space-y-1 text-sm text-gray-300 list-disc"></ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="col-span-2 p-8 space-y-8">
+          <!-- About Me -->
+          <section>
+            <h2 class="pb-1 mb-2 text-2xl font-bold text-gray-800 border-b-2 border-gray-200">About Me</h2>
+            <p id="marketingResumeSummary" class="text-sm text-gray-700">
+              Professional summary will appear here...
+            </p>
+          </section>
+
+          <!-- Work Experience -->
+          <section>
+            <h2 class="pb-1 mb-2 text-2xl font-bold text-gray-800 border-b-2 border-gray-200">Work Experience</h2>
+            <div id="marketingResumeExperience"></div>
+          </section>
+
+          <!-- Education & Skills -->
+          <section class="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <!-- Education -->
+            <div>
+              <h2 class="pb-1 mb-2 text-2xl font-bold text-gray-800 border-b-2 border-gray-200">Education</h2>
+              <div id="marketingResumeEducation" class="space-y-2 text-sm"></div>
+            </div>
+          </section>
+
+          <!-- Languages & Projects -->
+          <section class="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <!-- Projects -->
+            <div>
+              <h2 class="pb-1 mb-2 text-2xl font-bold text-gray-800 border-b-2 border-gray-200">Projects</h2>
+              <div id="marketingResumeProjects" class="space-y-2 text-sm"></div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+    
+    <!-- Template 3 - Mechanical Engineer -->
+    <div id="mechanicalTemplate" class="hidden  text-[#2d1e15] p-6">
+      <div class="grid max-w-5xl gap-8 mx-auto shadow-lg md:grid-cols-3">
+        <!-- Left Column -->
+        <div class="flex flex-col items-center p-3 space-y-6 text-center bg-red-200 md:col-span-1">
+          <div>
+            <h1 id="mechanicalResumeName" class="text-3xl font-bold">MARVELLOUS</h1>
+            <p id="mechanicalResumeTitle" class="text-sm uppercase text-[#af775f] font-semibold">Mechanical Engineer</p>
+          </div>
+
+          <!-- About Me -->
+          <div class="w-full text-left">
+            <h2 class="bg-[#4b2e2e] text-red-400  px-3 py-1 text-sm font-semibold flex items-center gap-2">
+              <span>👤</span> About Me
+            </h2>
+            <p id="mechanicalResumeSummary" class="p-3 text-sm">I am a Mechanical engineer who creates power producing and power consuming machines.</p>
+          </div>
+
+          <!-- Skills -->
+          <div class="w-full text-left">
+            <h2 class="bg-[#4b2e2e] text-red-400  px-3 py-1 text-sm font-semibold flex items-center gap-2">
+              <span>🛠️</span> Skills
+            </h2>
+            <div id="mechanicalResumeSkills" class="p-3 space-y-2">
+              <!-- Skills will be populated here -->
+            </div>
+          </div>
+          
+          <!-- Contact -->
+          <div class="w-full text-left">
+            <h2 class="bg-[#4b2e2e] text-red-400  px-3 py-1 text-sm font-semibold flex items-center gap-2">
+              <span>☎️</span> Contact
+            </h2>
+            <div class="p-3 space-y-2 text-sm">
+              <p id="mechanicalResumePhone">📞 +123-456-7890</p>
+              <p id="mechanicalResumeEmail">📧 hello@reallygreatsite.com</p>
+              <p id="mechanicalResumeLinkedin">🔗 linkedin.com/in/yourprofile</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="space-y-6 md:col-span-2">
+          <!-- Job Experience -->
+          <div>
+            <h2 class="bg-[#4b2e2e] text-red-400 px-3 py-1 text-sm font-semibold uppercase">Job Experience</h2>
+            <div id="mechanicalResumeExperience" class="p-4 space-y-2 text-sm">
+              <!-- Experience will be populated here -->
+            </div>
+          </div>
+
+          <!-- Education -->
+          <div>
+            <h2 class="bg-[#4b2e2e] text-red-400  px-3 py-1 text-sm font-semibold uppercase">Education History</h2>
+            <div id="mechanicalResumeEducation" class="p-4 space-y-2 text-sm">
+              <!-- Education will be populated here -->
+            </div>
+          </div>
+
+          <!-- Projects -->
+          <div>
+            <h2 class="bg-[#4b2e2e] text-red-400  px-3 py-1 text-sm font-semibold uppercase">Projects</h2>
+            <div id="mechanicalResumeProjects" class="p-4 space-y-2 text-sm">
+              <!-- Projects will be populated here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Template 4 - Doctor -->
+    <div id="doctorTemplate" class="hidden mt-6">
+      <div class="grid max-w-5xl grid-cols-1 mx-auto bg-white shadow-lg md:grid-cols-3">
+        <!-- Left Column -->
+        <div class="p-6 text-white bg-gray-800 md:col-span-1">
+          <h1 id="doctorResumeName" class="text-2xl font-bold">Dr. Sara Bellum</h1>
+          <p id="doctorResumeTitle" class="font-semibold text-green-300">Psychiatrist</p>
+
+          <div class="mt-6">
+            <h2 class="pb-1 mb-2 text-lg font-semibold border-b border-white">Contact</h2>
+            <p id="doctorResumePhone" class="mb-1">📞 +0 123 456 789</p>
+            <p id="doctorResumeEmail" class="mb-1">✉️ youremailaddress@mail.com</p>
+            <p id="doctorResumeLinkedin" class="mb-1">🌐 www.yourwebsitename.com</p>
+            <p id="doctorResumeDob">🎂 Not specified</p>
+          </div>
+
+          <div class="mt-6">
+            <h2 class="pb-1 mb-2 text-lg font-semibold border-b border-white">Skills</h2>
+            <ul id="doctorResumeSkills" class="text-sm list-disc list-inside">
+              <!-- Skills will be populated here -->
+            </ul>
+          </div>
+
+          <div class="mt-6">
+            <h2 class="pb-1 mb-2 text-lg font-semibold border-b border-white">Languages</h2>
+            <ul id="doctorResumeLanguages" class="text-sm list-disc list-inside">
+              <!-- Languages will be populated here -->
+            </ul>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="p-6 md:col-span-2">
+          <section class="mb-6">
+            <h2 class="pb-1 mb-2 text-xl font-semibold border-b-2 border-gray-200">Profile Info</h2>
+            <p id="doctorResumeSummary">Professional summary will appear here...</p>
+          </section>
+
+          <section class="mb-6">
+            <h2 class="pb-1 mb-2 text-xl font-semibold border-b-2 border-gray-200">Education</h2>
+            <div id="doctorResumeEducation">
+              <!-- Education will be populated here -->
+            </div>
+          </section>
+
+          <section class="mb-6">
+            <h2 class="pb-1 mb-2 text-xl font-semibold border-b-2 border-gray-200">Experience</h2>
+            <div id="doctorResumeExperience">
+              <!-- Experience will be populated here -->
+            </div>
+          </section>
+
+          <section class="mb-6">
+            <h2 class="pb-1 mb-2 text-xl font-semibold border-b-2 border-gray-200">Projects</h2>
+            <div id="doctorResumeProjects">
+              <!-- Projects will be populated here -->
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Template 5 - College Student -->
+    <div id="collegeTemplate" class="hidden mt-6 text-gray-800 bg-white">
+      <!-- Header -->
+      <div class="flex items-center justify-between p-6 bg-blue-400">
+        <div>
+          <h1 id="collegeResumeName" class="text-3xl font-bold">Sigmund Corwin</h1>
+          <p id="collegeResumeContact" class="text-sm">Brooklyn, NY 11201 | inquire@gourmetmingle.mail | template.net | 222 555 777</p>
+        </div>
+      </div>
+
+      <!-- Title -->
+      <div class="my-8 text-center">
+        <h2 class="text-2xl font-semibold tracking-wide">COLLEGE STUDENT RESUME</h2>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="max-w-3xl px-4 mx-auto">
+        <h3 class="mb-2 text-xl font-semibold">Contact Information</h3>
+        <table class="w-full mb-6 border border-gray-300">
+          <tr class="border-b border-gray-300">
+            <td class="w-1/4 p-2 font-medium">Name:</td>
+            <td id="collegeResumeName2" class="p-2">[YOUR NAME]</td>
+          </tr>
+          <tr class="border-b border-gray-300">
+            <td class="p-2 font-medium">Email:</td>
+            <td id="collegeResumeEmail" class="p-2">[YOUR EMAIL]</td>
+          </tr>
+          <tr>
+            <td class="p-2 font-medium">LinkedIn:</td>
+            <td id="collegeResumeLinkedin" class="p-2">[YOUR LINKEDIN PROFILE]</td>
+          </tr>
+        </table>
+
+        <!-- Objective -->
+        <h3 class="mb-2 text-xl font-semibold">Objective</h3>
+        <p id="collegeResumeSummary" class="mb-6">
+          Motivated and detail-oriented college student majoring in Computer Science, seeking a summer internship to leverage programming skills and gain hands-on experience in software development.
+        </p>
+
+        <!-- Education -->
+        <h3 class="mb-2 text-xl font-semibold">Education</h3>
+        <p id="collegeResumeUniversity" class="font-bold">Springfield University</p>
+        <p id="collegeResumeDegree">Bachelor of Science in Computer Science</p>
+        <p id="collegeResumeGraduation">Expected Graduation: May 2054</p>
+        <p id="collegeResumeGpa">GPA: 3.8/4.0</p>
+        <p class="mt-2 font-semibold">Relevant Coursework:</p>
+        <ul id="collegeResumeCoursework" class="list-disc list-inside">
+          <li>Data Structures</li>
+          <li>Algorithms</li>
+          <li>Software Engineering</li>
+          <li>Web Development</li>
+        </ul>
+        
+        <!-- Experience -->
+        <h3 class="mt-6 mb-2 text-xl font-semibold">Experience</h3>
+        <div id="collegeResumeExperience">
+          <!-- Experience will be populated here -->
+        </div>
+        
+        <!-- Projects -->
+        <h3 class="mt-6 mb-2 text-xl font-semibold">Projects</h3>
+        <div id="collegeResumeProjects">
+          <!-- Projects will be populated here -->
+        </div>
+        
+        <!-- Skills -->
+        <h3 class="mt-6 mb-2 text-xl font-semibold">Skills</h3>
+        <div id="collegeResumeSkills" class="flex flex-wrap gap-2">
+          <!-- Skills will be populated here -->
+        </div>
+        
+        <!-- Languages -->
+        <h3 class="mt-6 mb-2 text-xl font-semibold">Languages</h3>
+        <div id="collegeResumeLanguages" class="flex flex-wrap gap-4">
+          <!-- Languages will be populated here -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Template 6 - Copywriter -->
+    <div id="copywriterTemplate" class="hidden mt-6 text-gray-800 bg-white">
+      <div class="flex max-w-4xl mx-auto overflow-hidden border rounded-lg shadow-lg">
+        <!-- Left Column -->
+        <div class="w-1/3 p-6 text-center bg-green-100">
+          <div>
+            <h1 id="copywriterResumeName" class="mb-2 text-lg font-semibold">DORA BRYANT</h1>
+            <p id="copywriterResumeTitle" class="text-sm text-gray-600 uppercase">COPYWRITER</p>
+          </div>
+
+          <!-- About Me -->
+          <div class="w-full mt-4 text-left">
+            <h2 class="mb-2 text-lg font-semibold">PROFILE</h2>
+            <p id="copywriterResumeSummary" class="mb-4 text-sm">
+              Proficient in developing engaging copy for a wide range of channels. Strong research skills and ability to adapt tone and style to match client voice.
+            </p>
+          </div>
+
+          <!-- Skills -->
+          <div class="w-full text-left">
+            <h2 class="mb-2 text-lg font-semibold">SKILLS</h2>
+            <div id="copywriterResumeSkills" class="mb-4 ml-6 text-left">
+              <!-- Skills will be populated here -->
+            </div>
+          </div>
+
+          <!-- Contact -->
+          <div class="w-full text-left">
+            <h2 class="mb-2 text-lg font-semibold">CONTACT</h2>
+            <p id="copywriterResumePhone" class="mb-1 text-sm">+1 210-788-8529</p>
+            <p id="copywriterResumeEmail" class="mb-1 text-sm">email@yourwebsite.com</p>
+            <p id="copywriterResumeAddress" class="text-sm">4618 Sunrise Road, Las Vegas, NV 89119</p>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="w-2/3 p-6">
+          <h1 id="copywriterResumeName2" class="mb-1 text-3xl font-bold">DORA BRYANT</h1>
+          <p id="copywriterResumeTitle2" class="mb-6 text-xl text-gray-600">COPYWRITER</p>
+
+          <!-- Experience -->
+          <h2 class="mb-2 text-xl font-semibold">WORK EXPERIENCE</h2>
+          <div id="copywriterResumeExperience">
+            <!-- Experience will be populated here -->
+          </div>
+
+          <!-- Education -->
+          <h2 class="mt-6 mb-2 text-xl font-semibold">EDUCATION</h2>
+          <div id="copywriterResumeEducation">
+            <!-- Education will be populated here -->
+          </div>
+
+          <!-- Languages -->
+          <h2 class="mt-6 mb-2 text-xl font-semibold">LANGUAGE</h2>
+          <div id="copywriterResumeLanguages" class="flex items-center space-x-8">
+            <!-- Languages will be populated here -->
+          </div>
+          
+          <!-- Projects -->
+          <h2 class="mt-6 mb-2 text-xl font-semibold">PROJECTS</h2>
+          <div id="copywriterResumeProjects">
+            <!-- Projects will be populated here -->
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="py-6 text-center">
+      <button onclick="window.print()" class="px-6 py-2 mr-4 text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+        <i class="mr-2 fas fa-print"></i> Print Resume
+      </button>
+      <button onclick="backToTemplates()" class="px-6 py-2 text-gray-800 bg-gray-300 rounded-lg hover:bg-gray-400">
+        <i class="mr-2 fas fa-undo"></i> Choose Another Template
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Load saved data from localStorage
+    const resumeData = JSON.parse(localStorage.getItem('resumeData')) || {};
+    let currentTemplate = '';
+    
+    // Template selection function
+    function selectTemplate(templateName) {
+      document.getElementById('templateSelection').classList.add('hidden');
+      document.getElementById('generatedResume').classList.remove('hidden');
+      
+      // Hide all templates first
+      document.getElementById('professionalTemplate').classList.add('hidden');
+      document.getElementById('marketingTemplate').classList.add('hidden');
+      document.getElementById('mechanicalTemplate').classList.add('hidden');
+      document.getElementById('doctorTemplate').classList.add('hidden');
+      document.getElementById('collegeTemplate').classList.add('hidden');
+      document.getElementById('copywriterTemplate').classList.add('hidden');
+      
+      // Show selected template
+      currentTemplate = templateName;
+      document.getElementById(`${templateName}Template`).classList.remove('hidden');
+      
+      // Populate template with user data
+      populateResume();
+    }
+    
+    // Back to templates
+    function backToTemplates() {
+      document.getElementById('templateSelection').classList.remove('hidden');
+      document.getElementById('generatedResume').classList.add('hidden');
+    }
+    
+    // Format date for display
+    function formatDisplayDate(dateString) {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+    }
+    
+    // Format date for display (long format)
+    function formatLongDisplayDate(dateString) {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    
+    // Calculate skill percentage based on level
+    function getSkillPercentage(level) {
+      const levels = {
+        'beginner': 3,
+        'intermediate': 6,
+        'advanced': 8,
+        'expert': 10
+      };
+      return levels[level.toLowerCase()] || 5; // Default to intermediate if not matched
+    }
+    
+    // Populate resume with user data
+    function populateResume() {
+      console.log('Resume Data:', resumeData); // Debug log
+      
+      // Personal Info
+      if (resumeData.personalInfo) {
+        const personal = resumeData.personalInfo;
+        console.log('Personal Info:', personal); // Debug log
+        
+        // Name
+        if (personal.name) {
+          const names = personal.name.split(' ');
+          const firstName = names[0] || '';
+          const lastName = names.slice(1).join(' ') || '';
+          
+          if (currentTemplate === 'professional') {
+            document.getElementById('resumeName').textContent = 
+              `${firstName.toUpperCase()}\n${lastName.toUpperCase()}`;
+          } else if (currentTemplate === 'marketing') {
+            document.getElementById('marketingResumeName').textContent = 
+              `${firstName}\n${lastName}`;
+          } else if (currentTemplate === 'mechanical') {
+            document.getElementById('mechanicalResumeName').textContent = 
+              `${firstName.toUpperCase()} ${lastName.toUpperCase()}`;
+          } else if (currentTemplate === 'doctor') {
+            document.getElementById('doctorResumeName').textContent = 
+              `Dr. ${firstName} ${lastName}`;
+          } else if (currentTemplate === 'college') {
+            document.getElementById('collegeResumeName').textContent = 
+              `${firstName} ${lastName}`;
+            document.getElementById('collegeResumeName2').textContent = 
+              `${firstName} ${lastName}`;
+          } else if (currentTemplate === 'copywriter') {
+            document.getElementById('copywriterResumeName').textContent = 
+              `${firstName.toUpperCase()} ${lastName.toUpperCase()}`;
+            document.getElementById('copywriterResumeName2').textContent = 
+              `${firstName.toUpperCase()} ${lastName.toUpperCase()}`;
+          }
+        }
+        
+        // Contact Info
+        if (personal.email) {
+          if (currentTemplate === 'professional') {
+            document.getElementById('resumeEmail').textContent = personal.email;
+          } else if (currentTemplate === 'marketing') {
+            document.getElementById('marketingResumeEmail').textContent = `✉️ ${personal.email}`;
+          } else if (currentTemplate === 'mechanical') {
+            document.getElementById('mechanicalResumeEmail').textContent = `📧 ${personal.email}`;
+          } else if (currentTemplate === 'doctor') {
+            document.getElementById('doctorResumeEmail').textContent = `✉️ ${personal.email}`;
+          } else if (currentTemplate === 'college') {
+            document.getElementById('collegeResumeEmail').textContent = personal.email;
+          } else if (currentTemplate === 'copywriter') {
+            document.getElementById('copywriterResumeEmail').textContent = personal.email;
+          }
+        }
+        
+        if (personal.phone) {
+          if (currentTemplate === 'professional') {
+            document.getElementById('resumePhone').textContent = personal.phone;
+          } else if (currentTemplate === 'marketing') {
+            document.getElementById('marketingResumePhone').textContent = `📞 ${personal.phone}`;
+          } else if (currentTemplate === 'mechanical') {
+            document.getElementById('mechanicalResumePhone').textContent = `📞 ${personal.phone}`;
+          } else if (currentTemplate === 'doctor') {
+            document.getElementById('doctorResumePhone').textContent = `📞 ${personal.phone}`;
+          } else if (currentTemplate === 'college') {
+            document.getElementById('collegeResumeContact').textContent = 
+              `${personal.address || ''} | ${personal.email || 'Email not provided'} | ${personal.phone || 'Phone not provided'}`;
+          } else if (currentTemplate === 'copywriter') {
+            document.getElementById('copywriterResumePhone').textContent = personal.phone;
+          }
+        }
+        
+        if (personal.linkedin) {
+          if (currentTemplate === 'professional') {
+            document.getElementById('resumeLinkedin').textContent = personal.linkedin;
+          } else if (currentTemplate === 'marketing') {
+            document.getElementById('marketingResumeLinkedin').textContent = `🌐 ${personal.linkedin}`;
+          } else if (currentTemplate === 'mechanical') {
+            document.getElementById('mechanicalResumeLinkedin').textContent = `🔗 ${personal.linkedin}`;
+          } else if (currentTemplate === 'doctor') {
+            document.getElementById('doctorResumeLinkedin').textContent = `🌐 ${personal.linkedin}`;
+          } else if (currentTemplate === 'college') {
+            document.getElementById('collegeResumeLinkedin').textContent = personal.linkedin;
+          }
+        }
+        
+        if (personal.dob) {
+          if (currentTemplate === 'professional') {
+            document.getElementById('resumeDob').textContent = formatLongDisplayDate(personal.dob);
+          } else if (currentTemplate === 'marketing') {
+            document.getElementById('marketingResumeDob').textContent = formatLongDisplayDate(personal.dob);
+          } else if (currentTemplate === 'doctor') {
+            document.getElementById('doctorResumeDob').textContent = `🎂 ${formatLongDisplayDate(personal.dob)}`;
+          }
+        }
+        
+        if (personal.address && currentTemplate === 'college') {
+          document.getElementById('collegeResumeAddress').textContent = personal.address;
+        }
+        
+        if (personal.address && currentTemplate === 'copywriter') {
+          document.getElementById('copywriterResumeAddress').textContent = personal.address;
+        }
+      }
+      
+      // Professional Info
+      if (resumeData.role) {
+        if (currentTemplate === 'professional') {
+          document.getElementById('resumeTitle').textContent = resumeData.role;
+        } else if (currentTemplate === 'marketing') {
+          document.getElementById('marketingResumeTitle').textContent = resumeData.role;
+        } else if (currentTemplate === 'mechanical') {
+          document.getElementById('mechanicalResumeTitle').textContent = resumeData.role;
+        } else if (currentTemplate === 'doctor') {
+          document.getElementById('doctorResumeTitle').textContent = resumeData.role;
+        } else if (currentTemplate === 'copywriter') {
+          document.getElementById('copywriterResumeTitle').textContent = resumeData.role.toUpperCase();
+          document.getElementById('copywriterResumeTitle2').textContent = resumeData.role.toUpperCase();
+        }
+      }
+      
+      if (resumeData.summary) {
+        if (currentTemplate === 'professional') {
+          document.getElementById('resumeSummary').textContent = resumeData.summary;
+        } else if (currentTemplate === 'marketing') {
+          document.getElementById('marketingResumeSummary').textContent = resumeData.summary;
+        } else if (currentTemplate === 'mechanical') {
+          document.getElementById('mechanicalResumeSummary').textContent = resumeData.summary;
+        } else if (currentTemplate === 'doctor') {
+          document.getElementById('doctorResumeSummary').textContent = resumeData.summary;
+        } else if (currentTemplate === 'college') {
+          document.getElementById('collegeResumeSummary').textContent = resumeData.summary;
+        } else if (currentTemplate === 'copywriter') {
+          document.getElementById('copywriterResumeSummary').textContent = resumeData.summary;
+        }
+      }
+      
+      // Education
+      if (resumeData.education) {
+        const edu = resumeData.education;
+        
+        if (currentTemplate === 'professional') {
+          let html = '';
+          
+          if (edu.institution && edu.degree) {
+            const endDate = edu.endDate ? new Date(edu.endDate).getFullYear() : 'Present';
+            html += `
+              <div class="mb-4">
+                <h3 class="text-lg font-bold">${edu.degree}</h3>
+                <p class="text-gray-600">${edu.institution}</p>
+                <p class="text-sm text-gray-500">${edu.status === 'pursuing' ? 'Expected ' : ''}${endDate}</p>
+              </div>
+            `;
+          }
+          
+          if (edu.achievements) {
+            html += `
+              <div class="mb-4">
+                <h4 class="font-semibold">Achievements</h4>
+                <ul class="pl-2 text-sm text-gray-600 list-disc list-inside">
+                  ${edu.achievements.split('\n').filter(line => line.trim()).map(line => 
+                    `<li>${line.trim()}</li>`).join('')}
+                </ul>
+              </div>
+            `;
+          }
+          
+          document.getElementById('resumeEducation').innerHTML = html || '<p class="text-gray-500">No education information provided</p>';
+        } else if (currentTemplate === 'marketing') {
+          // Marketing template education format
+          let html = '';
+          
+          if (edu.institution && edu.degree) {
+            const endDate = edu.endDate ? new Date(edu.endDate).getFullYear() : 'Present';
+            html += `
+              <div>
+                <p class="font-semibold">${edu.degree}</p>
+                <p class="text-gray-600">${edu.institution} · ${edu.status === 'pursuing' ? 'Expected ' : ''}${endDate}</p>
+              </div>
+            `;
+          }
+          
+          document.getElementById('marketingResumeEducation').innerHTML = html || '<p class="text-gray-500">No education information provided</p>';
+        } else if (currentTemplate === 'mechanical') {
+          let html = '';
+          
+          if (edu.institution && edu.degree) {
+            const endDate = edu.endDate ? new Date(edu.endDate).getFullYear() : 'Present';
+            html += `
+              <div>
+                <h3 class="font-bold">${edu.degree} <span class="text-xs text-gray-500">(${edu.startDate ? new Date(edu.startDate).getFullYear() : ''} - ${edu.status === 'pursuing' ? 'Present' : endDate})</span></h3>
+                <p>${edu.institution}</p>
+                ${edu.achievements ? `<p class="mt-1">${edu.achievements.split('\n').filter(line => line.trim()).map(line => line.trim()).join('<br>')}</p>` : ''}
+              </div>
+            `;
+          }
+          
+          document.getElementById('mechanicalResumeEducation').innerHTML = html || '<p class="text-gray-500">No education information provided</p>';
+        } else if (currentTemplate === 'doctor') {
+          let html = '';
+          
+          if (edu.institution && edu.degree) {
+            const endDate = edu.endDate ? new Date(edu.endDate).getFullYear() : 'Present';
+            html += `
+              <p class="font-bold">${edu.startDate ? new Date(edu.startDate).getFullYear() : ''}-${endDate} ${edu.institution}</p>
+              <p class="mb-3">${edu.degree}</p>
+            `;
+          }
+          
+          document.getElementById('doctorResumeEducation').innerHTML = html || '<p class="text-gray-500">No education information provided</p>';
+        } else if (currentTemplate === 'college') {
+          if (edu.institution) {
+            document.getElementById('collegeResumeUniversity').textContent = edu.institution;
+          }
+          if (edu.degree) {
+            document.getElementById('collegeResumeDegree').textContent = edu.degree;
+          }
+          if (edu.endDate) {
+            document.getElementById('collegeResumeGraduation').textContent = 
+              `Expected Graduation: ${formatDisplayDate(edu.endDate)}`;
+          }
+          if (edu.gpa) {
+            document.getElementById('collegeResumeGpa').textContent = `GPA: ${edu.gpa}`;
+          }
+          if (edu.coursework) {
+            document.getElementById('collegeResumeCoursework').innerHTML = 
+              edu.coursework.split('\n').filter(line => line.trim()).map(line => 
+                `<li>${line.trim()}</li>`).join('');
+          }
+        } else if (currentTemplate === 'copywriter') {
+          let html = '';
+          
+          if (edu.institution && edu.degree) {
+            const endDate = edu.endDate ? new Date(edu.endDate).getFullYear() : 'Present';
+            html += `
+              <p class="font-semibold">${edu.institution}</p>
+              <p class="text-gray-600">${edu.degree} · ${edu.status === 'pursuing' ? 'Expected ' : ''}${endDate}</p>
+            `;
+          }
+          
+          document.getElementById('copywriterResumeEducation').innerHTML = html || '<p class="text-gray-500">No education information provided</p>';
+        }
+      }
+      
+      // Skills
+      if (resumeData.skills && resumeData.skills.length > 0) {
+        if (currentTemplate === 'professional') {
+          document.getElementById('resumeSkills').innerHTML = resumeData.skills.map(skill => `
+            <span class="px-3 py-1 text-sm bg-gray-200 rounded-full">${skill.name} (${skill.level})</span>
+          `).join('');
+        } else if (currentTemplate === 'marketing') {
+          document.getElementById('marketingResumeSkills').innerHTML = resumeData.skills.map(skill => `
+            <li>${skill.name} (${skill.level})</li>
+          `).join('');
+        } else if (currentTemplate === 'mechanical') {
+          document.getElementById('mechanicalResumeSkills').innerHTML = resumeData.skills.map(skill => `
+            <div>
+              <p>${skill.name}</p>
+              <div class="w-full h-2 bg-gray-200 rounded">
+                <div class="h-2 rounded" style="width: ${getSkillPercentage(skill.level) * 10}%; background-color: #4b2e2e;"></div>
+              </div>
+            </div>
+          `).join('');
+        } else if (currentTemplate === 'doctor') {
+          document.getElementById('doctorResumeSkills').innerHTML = resumeData.skills.map(skill => `
+            <li>${skill.name} (${skill.level})</li>
+          `).join('');
+        } else if (currentTemplate === 'college') {
+          document.getElementById('collegeResumeSkills').innerHTML = resumeData.skills.map(skill => `
+            <span class="px-3 py-1 text-sm bg-gray-200 rounded-full">${skill.name} (${skill.level})</span>
+          `).join('');
+        } else if (currentTemplate === 'copywriter') {
+          document.getElementById('copywriterResumeSkills').innerHTML = resumeData.skills.map(skill => `
+            <p>${skill.name.toUpperCase()}</p>
+            <div class="flex mb-2 space-x-1">
+              ${Array.from({length: getSkillPercentage(skill.level)}, (_, i) => 
+                `<span class="w-3 h-3 bg-green-700 rounded-full"></span>`).join('')}
+              ${Array.from({length: 10 - getSkillPercentage(skill.level)}, (_, i) => 
+                `<span class="w-3 h-3 bg-green-300 rounded-full"></span>`).join('')}
+            </div>
+          `).join('');
+        }
+      } else {
+        if (currentTemplate === 'professional') {
+          document.getElementById('resumeSkills').innerHTML = '<p class="text-gray-500">No skills provided</p>';
+        } else if (currentTemplate === 'marketing') {
+          document.getElementById('marketingResumeSkills').innerHTML = '<li>No skills provided</li>';
+        } else if (currentTemplate === 'mechanical') {
+          document.getElementById('mechanicalResumeSkills').innerHTML = '<p class="text-gray-500">No skills provided</p>';
+        } else if (currentTemplate === 'doctor') {
+          document.getElementById('doctorResumeSkills').innerHTML = '<li>No skills provided</li>';
+        } else if (currentTemplate === 'college') {
+          document.getElementById('collegeResumeSkills').innerHTML = '<p class="text-gray-500">No skills provided</p>';
+        } else if (currentTemplate === 'copywriter') {
+          document.getElementById('copywriterResumeSkills').innerHTML = '<p class="text-gray-500">No skills provided</p>';
+        }
+      }
+      
+      // Languages
+      if (resumeData.languages && resumeData.languages.length > 0) {
+        if (currentTemplate === 'professional') {
+          document.getElementById('resumeLanguages').innerHTML = resumeData.languages.map(lang => `
+            <div class="px-4 py-2 rounded-lg bg-blue-50">
+              <span class="font-medium">${lang.name}</span>
+              <span class="ml-2 text-sm text-gray-600">(${lang.level})</span>
+            </div>
+          `).join('');
+        } else if (currentTemplate === 'marketing') {
+          document.getElementById('marketingResumeLanguages').innerHTML = resumeData.languages.map(lang => `
+            <li>${lang.name} – ${lang.level}</li>
+          `).join('');
+        } else if (currentTemplate === 'mechanical') {
+          // Mechanical template doesn't have a languages section in the original
+        } else if (currentTemplate === 'doctor') {
+          document.getElementById('doctorResumeLanguages').innerHTML = resumeData.languages.map(lang => `
+            <li>${lang.name} – ${lang.level}</li>
+          `).join('');
+        } else if (currentTemplate === 'college') {
+          document.getElementById('collegeResumeLanguages').innerHTML = resumeData.languages.map(lang => `
+            <div class="px-4 py-2 rounded-lg bg-blue-50">
+              <span class="font-medium">${lang.name}</span>
+              <span class="ml-2 text-sm text-gray-600">(${lang.level})</span>
+            </div>
+          `).join('');
+        } else if (currentTemplate === 'copywriter') {
+          document.getElementById('copywriterResumeLanguages').innerHTML = resumeData.languages.map(lang => `
+            <div class="text-center">
+              <svg class="language-progress" viewBox="0 0 60 60">
+                <circle class="language-progress-bg" cx="30" cy="30" r="25"></circle>
+                <circle class="language-progress-fill" cx="30" cy="30" r="25" 
+                  stroke-dashoffset="${157 - (getSkillPercentage(lang.level) * 15.7)}"></circle>
+              </svg>
+              <p class="mt-2 text-sm">${lang.name.toUpperCase()}<br/>${getSkillPercentage(lang.level) * 10}%</p>
+            </div>
+          `).join('');
+        }
+      } else {
+        if (currentTemplate === 'professional') {
+          document.getElementById('resumeLanguages').innerHTML = '<p class="text-gray-500">No languages provided</p>';
+        } else if (currentTemplate === 'marketing') {
+          document.getElementById('marketingResumeLanguages').innerHTML = '<li>No languages provided</li>';
+        } else if (currentTemplate === 'doctor') {
+          document.getElementById('doctorResumeLanguages').innerHTML = '<li>No languages provided</li>';
+        } else if (currentTemplate === 'college') {
+          document.getElementById('collegeResumeLanguages').innerHTML = '<p class="text-gray-500">No languages provided</p>';
+        } else if (currentTemplate === 'copywriter') {
+          document.getElementById('copywriterResumeLanguages').innerHTML = '<p class="text-gray-500">No languages provided</p>';
+        }
+      }
+      
+      // Experience
+      if (resumeData.experience && resumeData.experience.length > 0) {
+        if (currentTemplate === 'professional') {
+          document.getElementById('resumeExperience').innerHTML = resumeData.experience.map(exp => `
+            <div class="py-1 pl-4 border-l-4 border-yellow-500">
+              <div class="flex items-start justify-between">
+                <div>
+                  <h3 class="text-lg font-bold">${exp.role || 'Role'}</h3>
+                  <p class="text-gray-600">${exp.company || exp.organization || 'Organization'}</p>
+                </div>
+                <p class="text-sm text-gray-500 whitespace-nowrap">
+                  ${exp.startDate ? formatDisplayDate(exp.startDate) : ''}
+                  ${exp.endDate ? ' - ' + formatDisplayDate(exp.endDate) : ' - Present'}
+                </p>
+              </div>
+              <ul class="pl-2 mt-2 text-sm text-gray-600 list-disc list-inside">
+                ${exp.description.split('\n').filter(line => line.trim()).map(line => 
+                  `<li>${line.trim()}</li>`).join('')}
+              </ul>
+            </div>
+          `).join('');
+        } else if (currentTemplate === 'marketing') {
+          document.getElementById('marketingResumeExperience').innerHTML = resumeData.experience.map(exp => `
+            <div class="mb-5">
+              <h3 class="font-semibold text-gray-900">${exp.role || 'Role'}</h3>
+              <p class="text-sm italic text-gray-600">${exp.company || exp.organization || 'Organization'} · ${exp.startDate ? formatDisplayDate(exp.startDate) : ''}${exp.endDate ? ' – ' + formatDisplayDate(exp.endDate) : ' – Present'}</p>
+              <ul class="mt-1 ml-5 space-y-1 text-sm text-gray-700 list-disc">
+                ${exp.description.split('\n').filter(line => line.trim()).map(line => 
+                  `<li>${line.trim()}</li>`).join('')}
+              </ul>
+            </div>
+          `).join('');
+        } else if (currentTemplate === 'mechanical') {
+          document.getElementById('mechanicalResumeExperience').innerHTML = resumeData.experience.map(exp => `
+            <div>
+              <h3 class="font-bold">${exp.role || 'Role'} <span class="text-xs text-gray-500">(${exp.startDate ? formatDisplayDate(exp.startDate) : ''} - ${exp.endDate ? formatDisplayDate(exp.endDate) : 'Present'})</span></h3>
+              <p>${exp.company || exp.organization || 'Organization'}</p>
+              <ul class="pl-2 mt-1 list-disc list-inside">
+                ${exp.description.split('\n').filter(line => line.trim()).map(line => 
+                  `<li>${line.trim()}</li>`).join('')}
+              </ul>
+            </div>
+          `).join('');
+        } else if (currentTemplate === 'doctor') {
+          document.getElementById('doctorResumeExperience').innerHTML = resumeData.experience.map(exp => `
+            <p class="font-bold">${exp.startDate ? formatDisplayDate(exp.startDate) : ''}-${exp.endDate ? formatDisplayDate(exp.endDate) : 'Present'} ${exp.company || exp.organization || 'Organization'}</p>
+            <p class="mb-3">${exp.role || 'Role'}</p>
+            <ul class="mb-4 ml-5 text-sm list-disc list-inside">
+              ${exp.description.split('\n').filter(line => line.trim()).map(line => 
+                `<li>${line.trim()}</li>`).join('')}
+            </ul>
+          `).join('');
+        } else if (currentTemplate === 'college') {
+          document.getElementById('collegeResumeExperience').innerHTML = resumeData.experience.map(exp => `
+            <div class="mb-4">
+              <h4 class="font-semibold">${exp.role || 'Role'}</h4>
+              <p class="text-sm text-gray-600">${exp.company || exp.organization || 'Organization'} · ${exp.startDate ? formatDisplayDate(exp.startDate) : ''} - ${exp.endDate ? formatDisplayDate(exp.endDate) : 'Present'}</p>
+              <ul class="mt-1 ml-4 text-sm list-disc list-inside">
+                ${exp.description.split('\n').filter(line => line.trim()).map(line => 
+                  `<li>${line.trim()}</li>`).join('')}
+              </ul>
+            </div>
+          `).join('');
+        } else if (currentTemplate === 'copywriter') {
+          document.getElementById('copywriterResumeExperience').innerHTML = resumeData.experience.map(exp => `
+            <div class="mb-5">
+              <h3 class="font-semibold">${exp.role || 'Role'}</h3>
+              <p class="text-sm text-gray-500">${exp.company || exp.organization || 'Organization'}<br/>${exp.startDate ? formatDisplayDate(exp.startDate) : ''} - ${exp.endDate ? formatDisplayDate(exp.endDate) : 'Present'}</p>
+              <ul class="mt-1 ml-5 space-y-1 text-sm text-gray-700 list-disc">
+                ${exp.description.split('\n').filter(line => line.trim()).map(line => 
+                  `<li>${line.trim()}</li>`).join('')}
+              </ul>
+            </div>
+          `).join('');
+        }
+      } else {
+        if (currentTemplate === 'professional') {
+          document.getElementById('resumeExperience').innerHTML = '<p class="text-gray-500">No experience provided</p>';
+        } else if (currentTemplate === 'marketing') {
+          document.getElementById('marketingResumeExperience').innerHTML = '<p class="text-gray-500">No experience provided</p>';
+        } else if (currentTemplate === 'mechanical') {
+          document.getElementById('mechanicalResumeExperience').innerHTML = '<p class="text-gray-500">No experience provided</p>';
+        } else if (currentTemplate === 'doctor') {
+          document.getElementById('doctorResumeExperience').innerHTML = '<p class="text-gray-500">No experience provided</p>';
+        } else if (currentTemplate === 'college') {
+          document.getElementById('collegeResumeExperience').innerHTML = '<p class="text-gray-500">No experience provided</p>';
+        } else if (currentTemplate === 'copywriter') {
+          document.getElementById('copywriterResumeExperience').innerHTML = '<p class="text-gray-500">No experience provided</p>';
+        }
+      }
+      
+      // Projects
+      if (resumeData.projects && resumeData.projects.length > 0) {
+        console.log('Projects Data:', resumeData.projects); // Debug log
+        
+        if (currentTemplate === 'professional') {
+          document.getElementById('resumeProjects').innerHTML = resumeData.projects.map(project => {
+            const actualProject = project.name ? project : (project.current || {});
+            return `
+            <div class="py-1 pl-4 border-l-4 border-blue-500">
+              <h3 class="text-lg font-bold">${actualProject.name || 'Project'}</h3>
+              <p class="text-gray-600">
+                ${actualProject.domain ? `(${actualProject.domain})` : ''}
+                ${actualProject.role ? ` | Role: ${actualProject.role}` : ''}
+              </p>
+              <ul class="pl-2 mt-2 text-sm text-gray-600 list-disc list-inside">
+                ${(actualProject.description || '').split('\n').filter(line => line.trim()).map(line => 
+                  `<li>${line.trim()}</li>`).join('')}
+              </ul>
+            </div>
+            `;
+          }).join('');
+        } else if (currentTemplate === 'marketing') {
+          document.getElementById('marketingResumeProjects').innerHTML = resumeData.projects.map(project => {
+            const actualProject = project.name ? project : (project.current || {});
+            return `
+            <div class="mb-2">
+              <p class="font-semibold">${actualProject.name || 'Project'}</p>
+              <p class="text-gray-600">${actualProject.domain ? `${actualProject.domain}` : ''}${actualProject.role ? ` | Role: ${actualProject.role}` : ''}</p>
+              <ul class="mt-1 ml-5 space-y-1 text-sm text-gray-700 list-disc">
+                ${(actualProject.description || '').split('\n').filter(line => line.trim()).map(line => 
+                  `<li>${line.trim()}</li>`).join('')}
+              </ul>
+            </div>
+            `;
+          }).join('');
+        } else if (currentTemplate === 'mechanical') {
+          document.getElementById('mechanicalResumeProjects').innerHTML = resumeData.projects.map(project => {
+            const actualProject = project.name ? project : (project.current || {});
+            return `
+            <div>
+              <h3 class="font-bold">${actualProject.name || 'Project'}</h3>
+              <p>${actualProject.domain ? `Domain: ${actualProject.domain}` : ''}${actualProject.role ? ` | Role: ${actualProject.role}` : ''}</p>
+              <ul class="pl-2 mt-1 list-disc list-inside">
+                ${(actualProject.description || '').split('\n').filter(line => line.trim()).map(line => 
+                  `<li>${line.trim()}</li>`).join('')}
+              </ul>
+            </div>
+            `;
+          }).join('');
+        } else if (currentTemplate === 'doctor') {
+          document.getElementById('doctorResumeProjects').innerHTML = resumeData.projects.map(project => {
+            const actualProject = project.name ? project : (project.current || {});
+            return `
+            <p class="font-bold">${actualProject.name || 'Project'}</p>
+            <p class="mb-3">${actualProject.domain ? `Domain: ${actualProject.domain}` : ''}${actualProject.role ? ` | Role: ${actualProject.role}` : ''}</p>
+            <ul class="mb-4 ml-5 text-sm list-disc list-inside">
+              ${(actualProject.description || '').split('\n').filter(line => line.trim()).map(line => 
+                `<li>${line.trim()}</li>`).join('')}
+            </ul>
+            `;
+          }).join('');
+        } else if (currentTemplate === 'college') {
+          document.getElementById('collegeResumeProjects').innerHTML = resumeData.projects.map(project => {
+            const actualProject = project.name ? project : (project.current || {});
+            return `
+            <div class="mb-4">
+              <h4 class="font-semibold">${actualProject.name || 'Project'}</h4>
+              <p class="text-sm text-gray-600">${actualProject.domain || ''}${actualProject.role ? ` | Role: ${actualProject.role}` : ''}</p>
+              <ul class="mt-1 ml-4 text-sm list-disc list-inside">
+                ${(actualProject.description || '').split('\n').filter(line => line.trim()).map(line => 
+                  `<li>${line.trim()}</li>`).join('')}
+              </ul>
+            </div>
+            `;
+          }).join('');
+        } else if (currentTemplate === 'copywriter') {
+          document.getElementById('copywriterResumeProjects').innerHTML = resumeData.projects.map(project => {
+            const actualProject = project.name ? project : (project.current || {});
+            return `
+            <div class="mb-5">
+              <h3 class="font-semibold">${actualProject.name || 'Project'}</h3>
+              <p class="text-sm text-gray-500">${actualProject.domain || ''}${actualProject.role ? ` | Role: ${actualProject.role}` : ''}</p>
+              <ul class="mt-1 ml-5 space-y-1 text-sm text-gray-700 list-disc">
+                ${(actualProject.description || '').split('\n').filter(line => line.trim()).map(line => 
+                  `<li>${line.trim()}</li>`).join('')}
+              </ul>
+            </div>
+            `;
+          }).join('');
+        }
+      } else {
+        if (currentTemplate === 'professional') {
+          document.getElementById('resumeProjects').innerHTML = '<p class="text-gray-500">No projects provided</p>';
+        } else if (currentTemplate === 'marketing') {
+          document.getElementById('marketingResumeProjects').innerHTML = '<p class="text-gray-500">No projects provided</p>';
+        } else if (currentTemplate === 'mechanical') {
+          document.getElementById('mechanicalResumeProjects').innerHTML = '<p class="text-gray-500">No projects provided</p>';
+        } else if (currentTemplate === 'doctor') {
+          document.getElementById('doctorResumeProjects').innerHTML = '<p class="text-gray-500">No projects provided</p>';
+        } else if (currentTemplate === 'college') {
+          document.getElementById('collegeResumeProjects').innerHTML = '<p class="text-gray-500">No projects provided</p>';
+        } else if (currentTemplate === 'copywriter') {
+          document.getElementById('copywriterResumeProjects').innerHTML = '<p class="text-gray-500">No projects provided</p>';
+        }
+      }
+    }
+    
+    // Initialize - if we have data, show templates immediately
+    if (Object.keys(resumeData).length > 0) {
+      // Already have data, ready to select template
+    } else {
+      alert('No resume data found. Please fill out the form first.');
+    }
+  </script>
+</body>
+</html>

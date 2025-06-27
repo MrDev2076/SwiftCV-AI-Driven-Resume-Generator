@@ -51,16 +51,16 @@ db.query(createUsersTable, (err) => {
 });
 
 
-// ✅ SQL Query to Create `My_faces` Table (For Face Data Storage)
+// ✅ SQL Query to Create `resume` Table (For Face Data Storage)
 const createCVTable = `
 CREATE TABLE IF NOT EXISTS My_resume (
-    id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) DEFAULT 'Unknown',
-    generated VARCHAR(50),
+    generated_at VARCHAR(50),
     status ENUM('active', 'inactive') DEFAULT 'active',
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 `;
+
 
 db.query(createCVTable, (err) => {
   if (err) {

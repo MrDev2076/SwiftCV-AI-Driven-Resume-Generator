@@ -10,7 +10,8 @@ const mysql = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
 const appRoutes = require("./routes/appRoutes");
-
+const generateRoutes = require("./routes/generateRoutes");
+const aboutRoutes = require('./routes/aboutRoutes');
 const app = express();
 
 app.set("view engine", "ejs");
@@ -39,7 +40,8 @@ app.use((req, res, next) => {
 // Routes
 app.use("/", authRoutes);
 app.use("/", appRoutes);
-
+app.use("/", generateRoutes);
+app.use(aboutRoutes);
 // Serve uploaded images from the `public/uploads` folder
 app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 
@@ -79,7 +81,7 @@ app.post("/api/analyze", upload.single("pdf"), async (req, res) => {
 
       // Save gen vid data into the database
       const sql =
-        "INSERT INTO My_doc (status, generated) VALUES (?, ?)";
+        "INSERT INTO My_resume (status, generated) VALUES (?, ?)";
       const values = ["active", resume];
 
       mysql.query(sql, values, (err) => {
@@ -135,7 +137,7 @@ app.get("/admin", (req, res) => {
 
 // View analytics data
 app.get("/view-analytics", (req, res) => {
-  const query = `SELECT id AS Sno,status, genrated, timestamp AS time FROM My_Vid`;
+  const query = `SELECT id AS Sno,status,  generated_at, timestamp AS time FROM my_resume`;
 
   mysql.query(query, (err, results) => {
     if (err) {
@@ -158,14 +160,47 @@ app.get("/image/:filename", (req, res) => {
   }
 });
 
+app.get('/load-resume_R', (req, res) => {
+  res.render('theams/resumes/R_resume.ejs');  // Ensure this path is correct
+});
+
+app.get('/load-resume_G', (req, res) => {
+  res.render('theams/resumes/G_resume.ejs');  // Ensure this path is correct
+});
+app.get('/load-resume_B', (req, res) => {
+  res.render('theams/resumes/B_resume.ejs');  // Ensure this path is correct
+});
+app.get('/load-resume_Y', (req, res) => {
+  res.render('theams/resumes/Y_resume.ejs');  // Ensure this path is correct
+});
+app.get('/resumes', (req, res) => {
+  res.render('resume'); // no '/views/' and no '.ejs'
+});
+
+
 // Reports page
 app.get("/reports", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "reports.html"));
 });
 
+app.use(express.static('public'));
+
 // Home page
 app.get("/", (req, res) => {
   res.render("index");
+});
+
+app.get("/resume_R",(req,res)=>{
+  res.render("theams/resumes/R_resume");
+});
+app.get("/resume_G",(req,res)=>{
+  res.render("theams/resumes/G_resume");
+});
+app.get("/resume_B",(req,res)=>{
+  res.render("theams/resumes/B_resume");
+});
+app.get("/resume_Y",(req,res)=>{
+  res.render("theams/resumes/Y_resume");
 });
 
 // Start server

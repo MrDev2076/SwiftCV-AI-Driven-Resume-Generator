@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Video Verese</title>
-  <link rel="icon" href="https://icons.veryicon.com/png/o/education-technology/artificial-intelligence-2/mtsai-video-ai.png" />
+  <title>SwiftCv - Resume Builder</title>
+  <link rel="icon" href="https://novoresume.com/images/media_kit/colorful-simple-logo.png " />
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  
   <style>
     .index{
       background-image: linear-gradient(to top, #f5fafd 0%, #b5e0f7 100%);
@@ -14,66 +16,186 @@
   </style>
 </head>
 <body class="bg-gray-100 text-dark index">
-
+  <div class="">
   <!-- Navbar -->
-  <nav class="bg-blue-900 p-4 shadow-md">
-    <div class="max-w-screen-xl px-16 mx-auto flex justify-between items-center">
-      <h1 class="text-white text-2xl font-semibold"><a href="/" class="text-white">Video Verese</a></h1>
+  <nav class="p-4 bg-blue-900 shadow-md">
+    <div class="flex items-center justify-between max-w-screen-xl px-16 mx-auto">
+      <h1 class="text-2xl font-semibold text-white"><a href="/" class="text-white">SwiftCv - Resume Builder</a></h1>
       <div class="flex space-x-4">
-        <a href="/" class="text-white text-sm   duration-300 ease-in-out hover:bg-yellow-500 px-4 py-2 rounded">Home</a>
-          
-        <a href="/profile" class="text-white text-sm   duration-300 ease-in-out hover:bg-yellow-500 px-4 py-2 rounded">Profile</a>
+        <a href="/" class="px-4 py-2 text-sm text-white duration-300 ease-in-out rounded hover:bg-yellow-500">Home</a>
+          <a href="/profile" class="px-4 py-2 text-sm text-white duration-300 ease-in-out rounded hover:bg-yellow-500">Profile</a>
           <% if (user && user.role !== 'user') { %>  
-          <a href="/admin" class="text-white text-sm border-b  duration-300 ease-in-out hover:text-yellow-400 px-4 py-2 rounded">⚡Admin Dashboard </a>
+          <a href="/admin" class="px-4 py-2 text-sm text-white duration-300 ease-in-out border-b rounded hover:text-yellow-400">⚡Admin Dashboard </a>
        <% } %>
-        <a href="/logout" class="text-white text-sm duration-300 ease-in-out hover:bg-red-500 px-4 py-2 rounded">Logout</a>
+        <a href="/logout" class="px-4 py-2 text-sm text-white duration-300 ease-in-out rounded hover:bg-red-500">Logout</a>
       </div>
     </div>
   </nav>
 
   <!-- Main Section -->
-  <section class="max-w-screen-xl px-16 py-8 flex justify-between items-center index">
+  <section class="flex items-center justify-between max-w-screen-xl px-16 py-8 index">
     <div class="w-1/3 my-auto">
    
       <% if (user.name) { %>
-        <h1 class="text-4xl text-dark font-semibold m-10 absolute left-10 top-20 min-h-[50px]" > Welcome to <br> Video Verese <br> <span class="text-blue-800"><%= user.name %></span>!</h1>
+        <h1 class="text-4xl text-dark font-semibold m-10 absolute left-10 top-20 min-h-[50px]" > Welcome to <br> SwiftCv - Resume Builder <br> <span class="text-blue-800"><%= user.name %></span>!</h1>
       <% } %>
        
  
         <h2 class="text-2xl mt-8 min-h-[40px]"></h2>
       
         <ol style="list-style: square;">
-            <p class="text-2xl mt-8 font-semibold">Key Features:</p>
-            <li><strong>Automated video generation on given propmpt</strong></li>
-            <li><strong>Automated gif generation on given propmpt</strong></li>
+            <p class="mt-8 text-2xl font-semibold">Key Features:</p>
+            <li><strong>Automated resume generation on given propmpt</strong></li>
+            <li><strong>Automated templates to suitable resume</strong></li>
             <li><strong>Suggested Propmts for sample</strong></li>
-            <li><strong>Giphy and PEXELS api Integration</strong></li>
-            <li><strong>Real-Time API Processing</strong></li>
         </ol>
 
 
  
-        <h2 class="text-lg mt-8 font-semibold mt-2">References:</h2>
+        <h2 class="mt-2 mt-8 text-lg font-semibold">References:</h2>
         <p>For detailed API usage and documentation, visit the following links:</p>
         <ul>
-            <li><a href="https://developers.giphy.com/dashboard/" target="_blank" class="text-blue-800 font-semibold">GIPHY Developer API Documentation</a></li>
-            <li><a href="https://www.pexels.com/api/key/" target="_blank" class="text-blue-800 font-semibold">pexels API Documentation</a></li>
+            <li><a href="https://developers.giphy.com/dashboard/" target="_blank" class="font-semibold text-blue-800"></a></li>
+            <li><a href="https://www.pexels.com/api/key/" target="_blank" class="font-semibold text-blue-800"></a></li>
         </ul>
 
 
     </div>
 
     <!-- Form Section for Translation -->
-    <main class="w-1/3 min-h-[90vh]  flex flex-col items-center justify-center p-6">
-      <%- include('core.ejs') -%>
+    <main class=" min-h-[90vh] flex flex-col items-center shadow-2xl rounded-full justify-right p-6 " style="position: relative; left: 20%;">
+      <img src="https://instaresume.io/section_1.webp"  alt="">
     </main>
   </section>
-  <script>
-     function loadFaceAnalyzer() {
-        const frame = document.getElementById('faceAnalyzerFrame');
-        frame.src = "/index.html";  // Load the file from the public folder
-        frame.classList.remove('hidden');  // Show the iframe
-    }
-  </script>
+
+  <section class="flex items-center justify-between px-20 py-8 max-w-screen-2xl index">
+   <main class="w-full p-2 m-10">
+      <h2 class="m-10 text-4xl font-bold text-center text-blue-800 border-b border-gray-800">SwiftCV - Career Guide</h2>
+      
+      <%- include('blog.ejs') -%>
+      </main>
+</section>
+
+<section class="flex items-center justify-between px-20 py-8 max-w-screen-2xl index">
+
+    
+      <section class="w-full p-2 m-10">
+        <h2 class="m-10 text-4xl font-bold text-center text-blue-800 border-b border-gray-800">Explore more Threams</h2>
+  
+        <div class="flex flex-wrap justify-center gap-4 mt-6">
+          <div class="w-1/4 text-center r1">
+            <img src="https://img.pikbest.com/origin/06/08/18/08UpIkbEsTKhu.jpg!w700wp" width="220" alt="">
+            <a href="/resume_R">
+              <button class="px-4 py-2 mt-4 text-white bg-red-500 rounded hover:bg-red-700">
+                Choose This
+              </button>
+            </a>
+          </div>
+        
+          <div class="w-1/4 text-center r2">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5pOLC-AY-sya7qWsgKb0boNqURQwPR6Usmw&s" width="220" alt="">
+            <a href="/resume_G">
+              <button class="px-4 py-2 mt-4 text-white bg-green-500 rounded hover:bg-green-700">
+                Choose This
+              </button>
+            </a>
+          </div>
+        
+          <div class="w-1/4 text-center r3">
+            <img src="https://jofibo.com/images/templates/creative_cv_template_thumbnail.png" width="220" alt="">
+            <a href="/resume_B">
+              <button class="px-4 py-2 mt-4 text-white bg-blue-500 rounded hover:bg-blue-700">
+                Choose This
+              </button>
+            </a>
+          </div>
+        
+          <div class="w-1/4 text-center r4">
+            <img src="https://cdn.venngage.com/template/thumbnail/small/7a2a57d3-5366-4a77-a91b-ddc2a28b0326.webp" width="220" alt="">
+            <a href="/resume_Y">
+              <button class="px-4 py-2 mt-4 bg-yellow-500 rounded text-dark hover:bg-yellow-600 hover:text-white">
+                Choose This
+              </button>
+            </a>
+          </div>
+        </div>
+        
+          
+        
+          
+
+
+    
+              <!--div id="resume-container" class="p-4 mt-6 bg-white border border-gray-300 shadow-lg"></div-
+              
+                <div class="mt-10 r4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" class="text-gray-700 transition duration-300 fill-current hover:text-blue-500" viewBox="0 0 16 16">
+              <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+            </svg>
+          </div>
+          
+             -->
+        </div>
+      </section>
+  </section>
+
+
+    <!-- Footer -->
+    <footer class="py-8 text-white bg-gray-800">
+      <div class="container px-4 mx-auto">
+          <div class="flex flex-col items-center justify-between md:flex-row">
+              <div class="mb-4 md:mb-0">
+                  <h3 class="text-xl font-bold"> SwiftCV</h3>
+                  <p class="mt-1 text-gray-400">Helping students launch successful careers</p>
+              </div>
+              <div class="flex space-x-4">
+                  <a href="#" class="text-gray-400 transition-all hover:text-white"><i class="text-xl fab fa-twitter"></i></a>
+                  <a href="#" class="text-gray-400 transition-all hover:text-white"><i class="text-xl fab fa-linkedin"></i></a>
+                  <a href="#" class="text-gray-400 transition-all hover:text-white"><i class="text-xl fab fa-instagram"></i></a>
+              </div>
+          </div>
+          <div class="pt-6 mt-6 text-sm text-center text-gray-400 border-t border-gray-700">
+              <p>© 2023 SwiftCV. All rights reserved.</p>
+          </div>
+      </div>
+  </footer>
+  
+<script>
+   document.getElementById('loadResume_R').addEventListener('click', function () {
+    fetch('/load-resume_R') // Call the Express route
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('resume-container').innerHTML = html;
+      })
+      .catch(error => console.error('Error loading resume:', error));
+  });
+  
+   document.getElementById('loadResume_B').addEventListener('click', function () {
+    fetch('/load-resume_B') // Call the Express route
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('resume-container').innerHTML = html;
+      })
+      .catch(error => console.error('Error loading resume:', error));
+  });
+   document.getElementById('loadResume_Y').addEventListener('click', function () {
+    fetch('/load-resume_Y') // Call the Express route
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('resume-container').innerHTML = html;
+      })
+      .catch(error => console.error('Error loading resume:', error));
+  });
+   document.getElementById('loadResume_G').addEventListener('click', function () {
+    fetch('/load-resume_G') // Call the Express route
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('resume-container').innerHTML = html;
+      })
+      .catch(error => console.error('Error loading resume:', error));
+  });
+</script>
 </body>
 </html>
+
+<!--%- include('core.ejs') -%>

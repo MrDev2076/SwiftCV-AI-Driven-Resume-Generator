@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Builder Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body{
+        background-image: url('https://webartdevelopers.com/blog/wp-content/uploads/2019/02/Animated-Ripples-Background-HTML-CSS.gif');
+        background-size: cover;
+     
+    }
+    .carousel-slide { 
+      display: none; 
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    .carousel-slide.active { display: block; }
+    .progress-bar {
+      height: 6px;
+      transition: width 0.3s ease;
+    }
+    .skill-tag {
+      transition: all 0.2s ease;
+    }
+    .skill-tag:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0.5; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .draggable-item {
+      cursor: grab;
+      transition: transform 0.2s;
+    }
+    .draggable-item:active {
+      cursor: grabbing;
+    }
+    .droppable-area {
+      min-height: 100px;
+      transition: background-color 0.3s;
+    }
+    .droppable-area.drag-over {
+      background-color: #f0f9ff;
+    }
+  </style>
+</head>
+
+<body class="font-sans text-gray-800 ">
+  <div class="max-w-4xl px-4 py-8 mx-auto">
+    <!-- Header with Progress -->
+    <div class="p-5 mb-10 text-center bg-gray-100 rounded-xl">
+      <h1 class="mb-2 text-4xl font-bold text-blue-600">Resume Builder Pro</h1>
+      <p class="mb-4 text-gray-600">Create a professional resume in just a few steps</p>
+      
+      <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+        <div id="progressBar" class="bg-blue-600 rounded-full progress-bar" style="width: 16.66%"></div>
+      </div>
+      
+      <div class="flex justify-between text-sm text-gray-600">
+        <span>Role & Summary</span>
+        <span>Education</span>
+        <span>Skills</span>
+        <span>Languages</span>
+        <span>Projects</span>
+        <span>Experience</span>
+      </div>
+    </div>
+
+    <div id="carousel" class="p-6 space-y-6 bg-white shadow-lg rounded-xl">
+      <!-- Slide 1: Role and Summary -->
+      <div class="carousel-slide active" id="slide1">
+        <div class="flex items-center mb-6">
+          <div class="flex items-center justify-center w-10 h-10 mr-4 text-blue-800 bg-blue-100 rounded-full">
+            <span class="font-bold">1</span>
+          </div>
+          <h2 class="text-2xl font-semibold">Role & Professional Summary</h2>
+        </div>
+        
+        <div class="space-y-6">
+          <div>
+            <label for="roleInput" class="block mb-1 text-sm font-medium text-gray-700">What role are you applying for?</label>
+            <input type="text" id="roleInput" placeholder="e.g. Frontend Developer, Data Scientist, Product Manager" 
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                   onchange="saveToLocalStorage('role', this.value)"/>
+          </div>
+          
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-sm font-medium text-gray-700">Professional Summary</label>
+              <button onclick="generateSummarySuggestions()" 
+                      class="flex items-center text-sm text-blue-600 hover:text-blue-800">
+                <i class="mr-1 fas fa-magic"></i> AI Generate Suggestions
+              </button>
+            </div>
+            <textarea id="summaryInput" class="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 droppable-area"
+                      onchange="saveToLocalStorage('summary', this.value)"></textarea>
+            <div id="summarySuggestions" class="grid grid-cols-1 gap-3 mt-3 md:grid-cols-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2: Education -->
+      <div class="carousel-slide" id="slide2">
+        <div class="flex items-center mb-6">
+          <div class="flex items-center justify-center w-10 h-10 mr-4 text-blue-800 bg-blue-100 rounded-full">
+            <span class="font-bold">2</span>
+          </div>
+          <h2 class="text-2xl font-semibold">Education Background</h2>
+        </div>
+        
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div>
+              <label for="eduInstitution" class="block mb-1 text-sm font-medium text-gray-700">Institution Name</label>
+              <input type="text" id="eduInstitution" placeholder="University of California, Berkeley" 
+                     class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                     onchange="saveToLocalStorage('education.institution', this.value)"/>
+            </div>
+            <div>
+              <label for="eduDegree" class="block mb-1 text-sm font-medium text-gray-700">Degree / Program</label>
+              <input type="text" id="eduDegree" placeholder="Bachelor of Science in Computer Science" 
+                     class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                     onchange="saveToLocalStorage('education.degree', this.value)"/>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div>
+              <label for="eduStatus" class="block mb-1 text-sm font-medium text-gray-700">Status</label>
+              <select id="eduStatus" onchange="toggleEduEndDate(); saveToLocalStorage('education.status', this.value)" 
+                      class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="completed">Completed</option>
+                <option value="pursuing">Currently Pursuing</option>
+              </select>
+            </div>
+            <div id="eduEndDateContainer">
+              <label for="eduEndDate" class="block mb-1 text-sm font-medium text-gray-700">Completion Date</label>
+              <input type="month" id="eduEndDate" 
+                     class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                     onchange="saveToLocalStorage('education.endDate', this.value)"/>
+            </div>
+          </div>
+          
+          <div>
+            <label for="eduAchievements" class="block mb-1 text-sm font-medium text-gray-700">Notable Achievements</label>
+            <textarea id="eduAchievements" placeholder="Honors, awards, or special projects" 
+                      class="w-full h-24 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 droppable-area"
+                      onchange="saveToLocalStorage('education.achievements', this.value)"></textarea>
+            <button onclick="generateEducationAchievements()" class="flex items-center mt-2 text-sm text-blue-600 hover:text-blue-800">
+              <i class="mr-1 fas fa-magic"></i> AI Generate Achievement Suggestions
+            </button>
+            <div id="eduAchievementSuggestions" class="grid grid-cols-1 gap-2 mt-3"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3: Skills -->
+      <div class="carousel-slide" id="slide3">
+        <div class="flex items-center mb-6">
+          <div class="flex items-center justify-center w-10 h-10 mr-4 text-blue-800 bg-blue-100 rounded-full">
+            <span class="font-bold">3</span>
+          </div>
+          <h2 class="text-2xl font-semibold">Your Skills & Expertise</h2>
+        </div>
+        
+        <div class="space-y-6">
+          <div class="p-4 rounded-lg bg-blue-50">
+            <h3 class="mb-2 font-medium text-blue-800">Add New Skill</h3>
+            <div class="flex flex-col gap-2 md:flex-row">
+              <div class="flex-1">
+                <input type="text" id="skillInput" placeholder="Skill name (e.g. React, Python, Project Management)" 
+                       class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"/>
+              </div>
+              <div class="w-full md:w-40">
+                <select id="skillLevel" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                  <option value="Expert">Expert</option>
+                </select>
+              </div>
+              <button onclick="addSkill()" class="flex items-center justify-center px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                <i class="mr-1 fas fa-plus"></i> Add
+              </button>
+            </div>
+          </div>
+          
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-medium text-gray-700">Suggested Skills for Your Role</h3>
+              <button onclick="generateRoleBasedSkills()" class="text-sm text-blue-600 hover:text-blue-800">
+                <i class="mr-1 fas fa-sync-alt"></i> Refresh
+              </button>
+            </div>
+            <div id="suggestedSkills" class="flex flex-wrap gap-2 mb-6">
+              <!-- Will be populated by JS -->
+            </div>
+          </div>
+          
+          <div>
+            <h3 class="mb-2 font-medium text-gray-700">Your Skills</h3>
+            <div id="skillList" class="flex flex-wrap gap-2">
+              <!-- Will be populated by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4: Languages -->
+      <div class="carousel-slide" id="slide4">
+        <div class="flex items-center mb-6">
+          <div class="flex items-center justify-center w-10 h-10 mr-4 text-blue-800 bg-blue-100 rounded-full">
+            <span class="font-bold">4</span>
+          </div>
+          <h2 class="text-2xl font-semibold">Languages You Speak</h2>
+        </div>
+        
+        <div class="space-y-6">
+          <div class="p-4 rounded-lg bg-blue-50">
+            <h3 class="mb-2 font-medium text-blue-800">Add New Language</h3>
+            <div class="flex flex-col gap-2 md:flex-row">
+              <div class="flex-1">
+                <input type="text" id="langInput" placeholder="Language (e.g. Spanish, French, Mandarin)" 
+                       class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"/>
+              </div>
+              <div class="w-full md:w-40">
+                <select id="langLevel" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  <option value="Basic">Basic</option>
+                  <option value="Conversational">Conversational</option>
+                  <option value="Fluent">Fluent</option>
+                  <option value="Native">Native/Bilingual</option>
+                </select>
+              </div>
+              <button onclick="addLanguage()" class="flex items-center justify-center px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                <i class="mr-1 fas fa-plus"></i> Add
+              </button>
+            </div>
+          </div>
+          
+          <div>
+            <h3 class="mb-2 font-medium text-gray-700">Your Languages</h3>
+            <div id="languageList" class="grid grid-cols-1 gap-3 md:grid-cols-2">
+              <!-- Will be populated by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 5: Projects -->
+      <div class="carousel-slide" id="slide5">
+        <div class="flex items-center mb-6">
+          <div class="flex items-center justify-center w-10 h-10 mr-4 text-blue-800 bg-blue-100 rounded-full">
+            <span class="font-bold">5</span>
+          </div>
+          <h2 class="text-2xl font-semibold">Projects & Portfolio</h2>
+        </div>
+        
+        <div class="space-y-6">
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div>
+              <label for="projName" class="block mb-1 text-sm font-medium text-gray-700">Project Name</label>
+              <input type="text" id="projName" placeholder="e.g. E-commerce Platform, Data Analysis Tool" 
+                     class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                     onchange="saveToLocalStorage('projects.current.name', this.value)"/>
+            </div>
+            <div>
+              <label for="projDomain" class="block mb-1 text-sm font-medium text-gray-700">Domain/Industry</label>
+              <input type="text" id="projDomain" placeholder="e.g. Web Development, Machine Learning" 
+                     class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                     onchange="saveToLocalStorage('projects.current.domain', this.value)"/>
+            </div>
+          </div>
+          
+          <div>
+            <label for="projRole" class="block mb-1 text-sm font-medium text-gray-700">Your Role in Project</label>
+            <input type="text" id="projRole" placeholder="e.g. Frontend Developer, Project Lead" 
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                   onchange="saveToLocalStorage('projects.current.role', this.value)"/>
+          </div>
+          
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-sm font-medium text-gray-700">Project Description</label>
+              <button onclick="generateProjectDescription()" class="flex items-center text-sm text-blue-600 hover:text-blue-800">
+                <i class="mr-1 fas fa-magic"></i> AI Generate Description
+              </button>
+            </div>
+            <textarea id="projDesc" class="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 droppable-area"
+                      onchange="saveToLocalStorage('projects.current.description', this.value)"></textarea>
+            <div id="projectSuggestions" class="mt-3 space-y-2"></div>
+          </div>
+          
+          <div>
+            <button onclick="addProject()" class="flex items-center justify-center px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700">
+              <i class="mr-2 fas fa-save"></i> Save This Project
+            </button>
+          </div>
+          
+          <div id="savedProjects" class="space-y-4">
+            <!-- Saved projects will appear here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 6: Work Experience -->
+      <div class="carousel-slide" id="slide6">
+        <div class="flex items-center mb-6">
+          <div class="flex items-center justify-center w-10 h-10 mr-4 text-blue-800 bg-blue-100 rounded-full">
+            <span class="font-bold">6</span>
+          </div>
+          <h2 class="text-2xl font-semibold">Work Experience</h2>
+        </div>
+        
+        <div class="space-y-6">
+          <div>
+            <label for="experienceLevel" class="block mb-1 text-sm font-medium text-gray-700">Your Experience Level</label>
+            <select id="experienceLevel" onchange="handleExperienceChange()" 
+                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              <option value="">-- Select Experience Level --</option>
+              <option value="entry">Entry-level (No Experience)</option>
+              <option value="intern">Intern (0-2 Years)</option>
+              <option value="mid">Mid-Level (2-5 Years)</option>
+              <option value="senior">Senior/Executive-level (5+ Years)</option>
+            </select>
+          </div>
+          
+          <div id="entrySection" class="hidden p-4 space-y-4 rounded-lg bg-blue-50">
+            <h3 class="font-medium text-blue-800">Internship Experience</h3>
+            <input type="text" id="internTitle" placeholder="Internship Title" 
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                   onchange="saveToLocalStorage('experience.internship.title', this.value)"/>
+            <input type="text" id="internOrg" placeholder="Organization" 
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                   onchange="saveToLocalStorage('experience.internship.organization', this.value)"/>
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <label for="internStart" class="block mb-1 text-sm font-medium text-gray-700">Start Date</label>
+                <input type="month" id="internStart" 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                       onchange="saveToLocalStorage('experience.internship.startDate', this.value)"/>
+              </div>
+              <div>
+                <label for="internEnd" class="block mb-1 text-sm font-medium text-gray-700">End Date</label>
+                <input type="month" id="internEnd" 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                       onchange="saveToLocalStorage('experience.internship.endDate', this.value)"/>
+              </div>
+            </div>
+            <div>
+              <label for="internDesc" class="block mb-1 text-sm font-medium text-gray-700">Description</label>
+              <textarea id="internDesc" class="w-full h-24 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 droppable-area"
+                        onchange="saveToLocalStorage('experience.internship.description', this.value)"></textarea>
+              <button onclick="generateInternshipDescription()" class="flex items-center mt-2 text-sm text-blue-600 hover:text-blue-800">
+                <i class="mr-1 fas fa-magic"></i> AI Generate Description
+              </button>
+              <div id="internDescSuggestions" class="mt-3 space-y-2"></div>
+            </div>
+          </div>
+          
+          <div id="experienceDetails" class="hidden space-y-4">
+            <div class="p-4 rounded-lg bg-blue-50">
+              <h3 class="mb-3 font-medium text-blue-800">Add Work Experience</h3>
+              
+              <div class="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2">
+                <div>
+                  <label for="companyName" class="block mb-1 text-sm font-medium text-gray-700">Company Name</label>
+                  <input type="text" id="companyName" placeholder="Google, Amazon, etc." 
+                         class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                         onchange="saveToLocalStorage('experience.current.company', this.value)"/>
+                </div>
+                <div>
+                  <label for="jobRole" class="block mb-1 text-sm font-medium text-gray-700">Your Role</label>
+                  <input type="text" id="jobRole" placeholder="Software Engineer, Product Manager" 
+                         class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                         onchange="saveToLocalStorage('experience.current.role', this.value)"/>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2">
+                <div>
+                  <label for="jobStart" class="block mb-1 text-sm font-medium text-gray-700">Start Date</label>
+                  <input type="month" id="jobStart" 
+                         class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                         onchange="saveToLocalStorage('experience.current.startDate', this.value)"/>
+                </div>
+                <div>
+                  <label for="jobEnd" class="block mb-1 text-sm font-medium text-gray-700">End Date</label>
+                  <input type="month" id="jobEnd" 
+                         class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                         onchange="saveToLocalStorage('experience.current.endDate', this.value)"/>
+                </div>
+              </div>
+              
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label class="block text-sm font-medium text-gray-700">Job Description</label>
+                  <button onclick="generateJobDescription()" class="flex items-center text-sm text-blue-600 hover:text-blue-800">
+                    <i class="mr-1 fas fa-magic"></i> AI Generate Bullet Points
+                  </button>
+                </div>
+                <textarea id="jobDesc" class="w-full h-24 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 droppable-area"
+                          onchange="saveToLocalStorage('experience.current.description', this.value)"></textarea>
+                <div id="jobDescSuggestions" class="mt-3 space-y-2"></div>
+              </div>
+              
+              <div class="mt-4">
+                <button onclick="addExperience()" class="flex items-center justify-center px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700">
+                  <i class="mr-2 fas fa-save"></i> Save This Experience
+                </button>
+              </div>
+            </div>
+            
+            <div id="savedExperiences" class="space-y-4">
+              <!-- Saved experiences will appear here -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+         <!-- Slide 7: personal Deta -->
+         <div class="carousel-slide" id="slide7">
+            <div class="flex items-center mb-6">
+              <div class="flex items-center justify-center w-10 h-10 mr-4 text-blue-800 bg-blue-100 rounded-full">
+                <span class="font-bold">7</span>
+              </div>
+              <h2 class="text-2xl font-semibold">Finally Add Your personal Data</h2>
+            </div>
+
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div>
+                    <label for="personalInfoPic" class="block mb-1 text-sm font-medium text-gray-700">Profile Pic</label>
+                    <input type="file" id="personalPic" placeholder="Choose your avatar" 
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                           onchange="saveToLocalStorage('personalInfo.pic', this.value)"/>
+                  </div>
+                  <div>
+                    <label for="personalInfoDob" class="block mb-1 text-sm font-medium text-gray-700">Date of Birth</label>
+                    <input type="date" id="personalDob" placeholder="Enter your personal/work email" 
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                           onchange="saveToLocalStorage('personalInfo.dob', this.value)"/>
+                  </div>
+                </div>
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div>
+                    <label for="personalInfoName" class="block mb-1 text-sm font-medium text-gray-700">Name</label>
+                    <input type="text" id="personalInfoName" placeholder="Enter Your Name to be on Resume" 
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                           onchange="saveToLocalStorage('personalInfo.name', this.value)"/>
+                  </div>
+                  <div>
+                    <label for="personalInfoMail" class="block mb-1 text-sm font-medium text-gray-700">Email</label>
+                    <input type="text" id="personalMail" placeholder="Enter your personal/work email" 
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                           onchange="saveToLocalStorage('personalInfo.email', this.value)"/>
+                  </div>
+                </div>
+                
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div>
+                        <label for="personalPhone" class="block mb-1 text-sm font-medium text-gray-700">Phone</label>
+                        <input type="number" id="personalPhone" placeholder="Enter your personal/work number" 
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                               onchange="saveToLocalStorage('personalInfo.phone', this.value)"/>
+                      </div>
+                      <div>
+                        <label for="personalLinkedIn" class="block mb-1 text-sm font-medium text-gray-700">LinkedIn</label>
+                        <input type="text" id="personalLinkedIn" placeholder="Enter your personal/work LinedIn" 
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                               onchange="saveToLocalStorage('personalInfo.linkedin', this.value)"/>
+                      </div>
+                </div>
+                Click ✅Finish to Save Your Data and select temlates</a>
+              </div>
+          </div>
+         </div>
+
+    </div>
+    
+    <!-- Navigation Buttons -->
+    <div class="flex justify-between mt-8">
+      <button id="prevBtn" onclick="prevSlide()" class="flex items-center px-6 py-2 text-gray-800 bg-gray-200 rounded-lg hover:bg-gray-300">
+        <i class="mr-2 fas fa-arrow-left"></i> Previous
+      </button>
+      <button id="nextBtn" onclick="nextSlide()" class="flex items-center px-6 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+        Next <i class="ml-2 fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // ========== INITIALIZATION & LOCAL STORAGE ==========
+    // Initialize data structure
+    const initializeData = () => {
+      if (!localStorage.getItem('resumeData')) {
+        localStorage.setItem('resumeData', JSON.stringify({
+          personalInfo: {
+        pic: '',
+        name: '',
+        email: '',
+        phone: '',
+        linkedin: '',
+        dob: ''
+      },
+          role: '',
+          summary: '',
+          education: {
+            institution: '',
+            degree: '',
+            status: 'completed',
+            endDate: '',
+            achievements: ''
+          },
+          skills: [],
+          languages: [],
+          projects: [],
+          experience: []
+        }));
+      }
+      return JSON.parse(localStorage.getItem('resumeData'));
+    };
+
+    // Handle profile picture upload
+document.getElementById('personalPic').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      // Save as base64 string
+      saveToLocalStorage('personalInfo.pic', event.target.result);
+      // Show preview
+      document.getElementById('profilePicPreview').src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// ========== UPDATED POPULATE RESUME FUNCTION ==========
+function populateResume() {
+  // Personal Info
+  if (resumeData.personalInfo) {
+    const personal = resumeData.personalInfo;
+    
+    // Profile Picture
+    if (personal.pic) {
+      document.getElementById('resumeProfilePic').src = personal.pic;
+    }
+    
+    // Name (split into first/last for vertical layout)
+    if (personal.name) {
+      const names = personal.name.split(' ');
+      const firstName = names[0] || '';
+      const lastName = names.slice(1).join(' ') || '';
+      document.getElementById('resumeName').textContent = 
+        `${firstName.toUpperCase()}\n${lastName.toUpperCase()}`;
+    }
+    
+    // Contact Info
+    if (personal.email) {
+      document.getElementById('resumeEmail').textContent = personal.email;
+    }
+    if (personal.phone) {
+      document.getElementById('resumePhone').textContent = personal.phone;
+    }
+    
+    // Date of Birth (formatted)
+    if (personal.dob) {
+      const dobDate = new Date(personal.dob);
+      const dobFormatted = dobDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      document.getElementById('resumeDob').textContent = dobFormatted;
+    }
+  }
+
+  // Rest of your existing population code...
+}
+  // Profile picture removal
+function removeProfilePic() {
+  document.getElementById('personalPic').value = '';
+  document.getElementById('profilePicPreviewContainer').style.display = 'none';
+  saveToLocalStorage('personalInfo.pic', '');
+}
+    // Save data to local storage
+    const saveToLocalStorage = (key, value) => {
+      const data = initializeData();
+      const keys = key.split('.');
+      let current = data;
+      
+      for (let i = 0; i < keys.length - 1; i++) {
+        if (!current[keys[i]]) current[keys[i]] = {};
+        current = current[keys[i]];
+      }
+      
+      current[keys[keys.length - 1]] = value;
+      localStorage.setItem('resumeData', JSON.stringify(data));
+    };
+  
+    // Load data from local storage
+    const loadFromLocalStorage = () => {
+      const data = initializeData();
+      
+      // Role & Summary
+      if (data.role) document.getElementById('roleInput').value = data.role;
+      if (data.summary) document.getElementById('summaryInput').value = data.summary;
+      
+      // Education
+      if (data.education) {
+        const edu = data.education;
+        if (edu.institution) document.getElementById('eduInstitution').value = edu.institution;
+        if (edu.degree) document.getElementById('eduDegree').value = edu.degree;
+        if (edu.status) document.getElementById('eduStatus').value = edu.status;
+        if (edu.endDate) document.getElementById('eduEndDate').value = edu.endDate;
+        if (edu.achievements) document.getElementById('eduAchievements').value = edu.achievements;
+        toggleEduEndDate();
+      }
+      
+      // Skills
+      if (data.skills && data.skills.length > 0) {
+        skills = new Map(data.skills.map(skill => [skill.name.toLowerCase(), skill]));
+        renderSkills();
+      }
+      
+      // Languages
+      if (data.languages && data.languages.length > 0) {
+        languages = [...data.languages];
+        renderLanguages();
+      }
+      
+      // Projects
+      if (data.projects && data.projects.length > 0) {
+        projects = [...data.projects];
+        renderProjects();
+      }
+      
+      // Experience
+      if (data.experience && data.experience.length > 0) {
+        experience = [...data.experience];
+        renderExperience();
+      }
+    };
+  
+    // ========== CAROUSEL NAVIGATION ==========
+    let currentSlide = 0;
+    const slides = document.querySelectorAll(".carousel-slide");
+    const totalSlides = slides.length;
+  
+    const updateProgressBar = () => {
+      const progress = ((currentSlide + 1) / totalSlides) * 100;
+      document.getElementById('progressBar').style.width = `${progress}%`;
+    };
+  
+    const showSlide = (index) => {
+      if (index < 0 || index >= totalSlides) return;
+      
+      currentSlide = index;
+      slides.forEach((slide, i) => slide.classList.toggle("active", i === index));
+      
+      document.getElementById('prevBtn').style.visibility = index === 0 ? 'hidden' : 'visible';
+      document.getElementById('nextBtn').innerHTML = index === totalSlides - 1 ? 
+        '<i class="mr-2 fas fa-check"></i> <a href="/resumes" > Finish </a>' : 
+        'Next <i class="ml-2 fas fa-arrow-right"></i>'
+        ;
+      
+      updateProgressBar();
+    };
+  
+    const nextSlide = () => {
+      if (currentSlide === totalSlides - 1) {
+        alert('Resume data saved! Ready to generate your resume.');
+        return;
+      }
+      showSlide(currentSlide + 1);
+    };
+  
+    const prevSlide = () => {
+      showSlide(currentSlide - 1);
+    };
+  
+    // ========== EDUCATION SECTION ==========
+    const toggleEduEndDate = () => {
+      const status = document.getElementById('eduStatus').value;
+      document.getElementById('eduEndDateContainer').style.display = (status === 'completed') ? 'block' : 'none';
+      saveToLocalStorage('education.status', status);
+    };
+  
+    // ========== SUMMARY SECTION ==========
+    const generateSummarySuggestions = () => {
+      const role = document.getElementById('roleInput').value.trim() || 'your field';
+      const suggestions = [
+        `Results-driven ${role} with a proven track record of delivering high-quality solutions. Adept at collaborating with cross-functional teams to achieve project goals and drive business growth.`,
+        `Innovative ${role} passionate about creating efficient, scalable solutions. Strong problem-solving skills combined with technical expertise to deliver exceptional results.`,
+        `Detail-oriented ${role} with expertise in multiple technologies. Committed to writing clean, maintainable code and following best practices.`,
+        `Experienced ${role} with a focus on user-centered design. Skilled at translating business requirements into technical solutions that exceed expectations.`
+      ];
+      
+      const container = document.getElementById('summarySuggestions');
+      container.innerHTML = '';
+      
+      suggestions.forEach((text, index) => {
+        const div = document.createElement('div');
+        div.className = 'p-3 bg-gray-100 rounded-lg border border-gray-200 draggable-item cursor-move';
+        div.draggable = true;
+        div.innerHTML = `
+          <div class="flex items-start justify-between">
+            <span>${text}</span>
+            <button onclick="insertSuggestion('summaryInput', ${index})" class="ml-2 text-blue-600 hover:text-blue-800">
+              <i class="fas fa-plus-circle"></i>
+            </button>
+          </div>
+        `;
+        div.dataset.text = text;
+        div.ondragstart = e => {
+          e.dataTransfer.setData("text/plain", text);
+          e.target.classList.add('opacity-50');
+        };
+        div.ondragend = e => {
+          e.target.classList.remove('opacity-50');
+        };
+        container.appendChild(div);
+      });
+      
+      setupDroppableAreas();
+    };
+  
+    // ========== EDUCATION ACHIEVEMENTS ==========
+    const generateEducationAchievements = () => {
+      const degree = document.getElementById('eduDegree').value.trim() || 'your degree';
+      const suggestions = [
+        `Graduated with honors (GPA: 3.8/4.0) and received the Dean's Award for academic excellence.`,
+        `Completed senior thesis project on [relevant topic] that was nominated for departmental honors.`,
+        `Participated in [number] hackathons/competitions, winning [award] for [project description].`,
+        `Served as [leadership position] for [student organization], organizing [number] events with [number] attendees.`,
+        `Published research paper titled "[Paper Title]" in [Journal/Conference Name] as part of undergraduate research.`
+      ];
+      
+      const container = document.getElementById('eduAchievementSuggestions');
+      container.innerHTML = '';
+      
+      suggestions.forEach((text, index) => {
+        const div = document.createElement('div');
+        div.className = 'p-3 bg-gray-100 rounded-lg border border-gray-200 draggable-item cursor-move';
+        div.draggable = true;
+        div.innerHTML = `
+          <div class="flex items-start justify-between">
+            <span>${text}</span>
+            <button onclick="insertSuggestion('eduAchievements', ${index})" class="ml-2 text-blue-600 hover:text-blue-800">
+              <i class="fas fa-plus-circle"></i>
+            </button>
+          </div>
+        `;
+        div.dataset.text = text;
+        div.ondragstart = e => {
+          e.dataTransfer.setData("text/plain", text);
+          e.target.classList.add('opacity-50');
+        };
+        div.ondragend = e => {
+          e.target.classList.remove('opacity-50');
+        };
+        container.appendChild(div);
+      });
+      
+      setupDroppableAreas();
+    };
+  
+    const insertSuggestion = (textareaId, index) => {
+      const textarea = document.getElementById(textareaId);
+      const suggestions = document.querySelectorAll(`#${textareaId === 'summaryInput' ? 'summarySuggestions' : 'eduAchievementSuggestions'} .draggable-item`);
+      const text = suggestions[index].dataset.text;
+      
+      textarea.value = textarea.value ? textarea.value + '\n\n' + text : text;
+      saveToLocalStorage(textareaId === 'summaryInput' ? 'summary' : 'education.achievements', textarea.value);
+    };
+  
+    // ========== SKILLS MANAGEMENT ==========
+    let skills = new Map();
+  
+    const addSkill = (nameInput, levelInput) => {
+      const name = nameInput || document.getElementById('skillInput').value.trim();
+      const level = levelInput || document.getElementById('skillLevel').value;
+      
+      if (!name) return;
+      
+      skills.set(name.toLowerCase(), { name, level });
+      renderSkills();
+      
+      if (!nameInput) document.getElementById('skillInput').value = '';
+      
+      // Update local storage
+      const data = initializeData();
+      data.skills = Array.from(skills.values());
+      localStorage.setItem('resumeData', JSON.stringify(data));
+    };
+  
+    const renderSkills = () => {
+      const container = document.getElementById('skillList');
+      container.innerHTML = '';
+      
+      skills.forEach((val, key) => {
+        const div = document.createElement('div');
+        div.className = 'skill-tag flex items-center bg-blue-100 text-blue-800 rounded-full px-4 py-2';
+        div.innerHTML = `
+          <span class="font-medium">${val.name}</span>
+          <span class="mx-2 text-blue-600">•</span>
+          <span class="text-sm">${val.level}</span>
+          <button onclick="removeSkill('${key}')" class="ml-2 text-blue-600 hover:text-blue-800">
+            <i class="fas fa-times"></i>
+          </button>
+        `;
+        container.appendChild(div);
+      });
+    };
+  
+    const removeSkill = (key) => {
+      skills.delete(key);
+      renderSkills();
+      
+      const data = initializeData();
+      data.skills = Array.from(skills.values());
+      localStorage.setItem('resumeData', JSON.stringify(data));
+    };
+  
+    const generateRoleBasedSkills = () => {
+      const role = document.getElementById('roleInput').value.trim().toLowerCase() || 'software developer';
+      let suggestedSkills = [];
+      
+      if (role.includes('frontend') || role.includes('ui') || role.includes('web')) {
+        suggestedSkills = [
+          {name: 'HTML5', level: 'Expert'},
+          {name: 'CSS3', level: 'Expert'},
+          {name: 'JavaScript', level: 'Expert'},
+          {name: 'React', level: 'Advanced'},
+          {name: 'TypeScript', level: 'Intermediate'},
+          {name: 'Responsive Design', level: 'Advanced'},
+          {name: 'UI/UX Principles', level: 'Intermediate'},
+          {name: 'Git', level: 'Intermediate'}
+        ];
+      } else if (role.includes('backend') || role.includes('api') || role.includes('server')) {
+        suggestedSkills = [
+          {name: 'Node.js', level: 'Advanced'},
+          {name: 'Python', level: 'Advanced'},
+          {name: 'Java', level: 'Intermediate'},
+          {name: 'RESTful APIs', level: 'Advanced'},
+          {name: 'SQL', level: 'Advanced'},
+          {name: 'Docker', level: 'Intermediate'},
+          {name: 'AWS', level: 'Intermediate'},
+          {name: 'Microservices', level: 'Intermediate'}
+        ];
+      } else if (role.includes('data') || role.includes('analyst') || role.includes('scientist')) {
+        suggestedSkills = [
+          {name: 'Python', level: 'Advanced'},
+          {name: 'R', level: 'Intermediate'},
+          {name: 'SQL', level: 'Expert'},
+          {name: 'Pandas', level: 'Advanced'},
+          {name: 'NumPy', level: 'Advanced'},
+          {name: 'Machine Learning', level: 'Intermediate'},
+          {name: 'Data Visualization', level: 'Advanced'},
+          {name: 'Tableau', level: 'Intermediate'}
+        ];
+      } else {
+        // Default suggestions
+        suggestedSkills = [
+          {name: 'Communication', level: 'Advanced'},
+          {name: 'Teamwork', level: 'Advanced'},
+          {name: 'Problem Solving', level: 'Advanced'},
+          {name: 'Project Management', level: 'Intermediate'},
+          {name: 'Microsoft Office', level: 'Expert'},
+          {name: 'Time Management', level: 'Advanced'}
+        ];
+      }
+      
+      const container = document.getElementById('suggestedSkills');
+      container.innerHTML = '';
+      
+      suggestedSkills.forEach(skill => {
+        const button = document.createElement('button');
+        button.className = 'bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-lg text-sm flex items-center';
+        button.innerHTML = `
+          ${skill.name} <span class="ml-1 text-gray-500">(${skill.level})</span>
+        `;
+        button.onclick = () => addSkill(skill.name, skill.level);
+        container.appendChild(button);
+      });
+    };
+  
+    // ========== LANGUAGES MANAGEMENT ==========
+    let languages = [];
+  
+    const addLanguage = () => {
+      const name = document.getElementById('langInput').value.trim();
+      const level = document.getElementById('langLevel').value;
+      
+      if (!name) return;
+      
+      languages.push({ name, level });
+      renderLanguages();
+      document.getElementById('langInput').value = '';
+      
+      // Update local storage
+      const data = initializeData();
+      data.languages = [...languages];
+      localStorage.setItem('resumeData', JSON.stringify(data));
+    };
+  
+    const renderLanguages = () => {
+      const container = document.getElementById('languageList');
+      container.innerHTML = '';
+      
+      languages.forEach((lang, index) => {
+        const div = document.createElement('div');
+        div.className = 'p-3 bg-green-50 rounded-lg border border-green-100 flex justify-between items-center';
+        div.innerHTML = `
+          <div>
+            <span class="font-medium">${lang.name}</span>
+            <span class="mx-2 text-green-600">•</span>
+            <span class="text-sm">${lang.level}</span>
+          </div>
+          <button onclick="removeLanguage(${index})" class="text-red-500 hover:text-red-700">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        `;
+        container.appendChild(div);
+      });
+    };
+  
+    const removeLanguage = (index) => {
+      languages.splice(index, 1);
+      renderLanguages();
+      
+      const data = initializeData();
+      data.languages = [...languages];
+      localStorage.setItem('resumeData', JSON.stringify(data));
+    };
+  
+    // ========== PROJECTS MANAGEMENT ==========
+    
+(function() {
+  let projects = [];
+  let suggestionTexts = [];
+
+  function generateProjectDescription() {
+  const name = document.getElementById('projName').value.trim() || 'project';
+  const domain = document.getElementById('projDomain').value.trim() || 'domain';
+  const role = document.getElementById('projRole').value.trim() || 'developer';
+
+  const suggestions = [
+    `Developed a ${name} in the ${domain} domain, where I served as ${role}. Implemented key features including [feature1] and [feature2], resulting in [quantifiable outcome].`,
+    `As ${role} for the ${name} project, designed and built a ${domain} solution that improved [metric] by [percentage]. Technologies used included [tech1], [tech2], and [tech3].`,
+    `Led the ${role} role for ${name}, a ${domain} application. Architected the system to handle [scale] while maintaining [performance metric]. Collaborated with [team members] to deliver on time.`
+  ];
+
+  const container = document.getElementById('projectSuggestions');
+  container.innerHTML = '';
+
+  suggestions.forEach((text) => {
+    const div = document.createElement('div');
+    div.className = 'p-3 bg-gray-100 rounded-lg border border-gray-200 draggable-item cursor-move';
+    div.innerHTML = `
+      <div class="flex items-start justify-between">
+        <span class="text-sm">${text}</span>
+        <button class="ml-2 text-blue-600 hover:text-blue-800 insert-button" data-text="${text.replace(/"/g, '&quot;')}">
+          <i class="fas fa-plus-circle"></i>
+        </button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+
+  setupDroppableAreas();
+
+  // Attach event listeners for insert buttons
+  document.querySelectorAll('.insert-button').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const text = this.getAttribute('data-text');
+      document.getElementById('projDesc').value = text;
+    });
+  });
+}
+
+
+  window.generateProjectDescription = generateProjectDescription;
+
+  function insertSuggestion(targetId, index) {
+    const target = document.getElementById(targetId);
+    const suggestion = suggestionTexts[index] || '';
+    target.value = suggestion;
+  }
+
+  window.insertSuggestion = insertSuggestion;
+
+  function addProject() {
+    const name = document.getElementById('projName').value.trim();
+    const domain = document.getElementById('projDomain').value.trim();
+    const role = document.getElementById('projRole').value.trim();
+    const desc = document.getElementById('projDesc').value.trim();
+
+    if (!name || !desc) {
+      alert('Please fill in at least Project Name and Description');
+      return;
+    }
+
+    projects.push({ name, domain, role, desc });
+    renderProjects();
+
+    // Reset form
+    document.getElementById('projName').value = '';
+    document.getElementById('projDomain').value = '';
+    document.getElementById('projRole').value = '';
+    document.getElementById('projDesc').value = '';
+
+    const data = initializeData();
+    data.projects = [...projects];
+    localStorage.setItem('resumeData', JSON.stringify(data));
+  }
+
+  window.addProject = addProject;
+
+  function renderProjects() {
+    const container = document.getElementById('savedProjects');
+    container.innerHTML = '';
+
+    if (projects.length === 0) {
+      container.innerHTML = '<p class="py-4 text-center text-gray-500">No projects saved yet</p>';
+      return;
+    }
+
+    projects.forEach((project, index) => {
+      const projectDiv = document.createElement('div');
+      projectDiv.className = 'p-4 bg-white rounded-lg border border-gray-200 shadow-sm';
+      projectDiv.innerHTML = `
+        <div class="flex items-start justify-between mb-2">
+          <h4 class="text-lg font-bold">${project.name}</h4>
+          <button onclick="removeProject(${index})" class="text-red-500 hover:text-red-700">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </div>
+        <div class="mb-2 text-sm text-gray-600">
+          <span class="font-medium">Domain:</span> ${project.domain || 'Not specified'}
+          <span class="mx-2">•</span>
+          <span class="font-medium">Role:</span> ${project.role || 'Not specified'}
+        </div>
+        <div class="text-gray-700 whitespace-pre-line">${project.desc}</div>
+      `;
+      container.appendChild(projectDiv);
+    });
+  }
+
+  function removeProject(index) {
+    projects.splice(index, 1);
+    renderProjects();
+
+    const data = initializeData();
+    data.projects = [...projects];
+    localStorage.setItem('resumeData', JSON.stringify(data));
+  }
+
+  window.removeProject = removeProject;
+
+  function initializeData() {
+    const existing = localStorage.getItem('resumeData');
+    return existing ? JSON.parse(existing) : {};
+  }
+
+  function setupDroppableAreas() {
+    const areas = document.querySelectorAll('.droppable-area');
+    areas.forEach(area => {
+      area.ondragover = e => e.preventDefault();
+      area.ondrop = e => {
+        e.preventDefault();
+        const text = e.dataTransfer.getData("text/plain");
+        area.value = text;
+      };
+    });
+  }
+
+})();
+
+
+    // ========== EXPERIENCE MANAGEMENT ==========
+    let experience = [];
+  
+    const handleExperienceChange = () => {
+      const val = document.getElementById('experienceLevel').value;
+      document.getElementById('entrySection').classList.toggle('hidden', val !== 'entry');
+      document.getElementById('experienceDetails').classList.toggle('hidden', val === 'entry' || val === '');
+      saveToLocalStorage('experience.level', val);
+    };
+  
+    const generateInternshipDescription = () => {
+      const title = document.getElementById('internTitle').value.trim() || 'internship';
+      const org = document.getElementById('internOrg').value.trim() || 'organization';
+      
+      const suggestions = [
+        `Completed a ${title} at ${org}, gaining hands-on experience with [technology/process]. Assisted with [specific tasks] and contributed to [project/initiative].`,
+        `As a ${title} at ${org}, supported the [department/team] by [specific responsibilities]. Developed skills in [skill1], [skill2], and [skill3] through practical application.`,
+        `During my ${title} with ${org}, participated in [activities] and collaborated with team members to [achievement]. Gained valuable insight into [industry/field] operations.`
+      ];
+      
+      const container = document.getElementById('internDescSuggestions');
+      container.innerHTML = '';
+      
+      suggestions.forEach((text, index) => {
+        const div = document.createElement('div');
+        div.className = 'p-3 bg-gray-100 rounded-lg border border-gray-200 draggable-item cursor-move';
+        div.draggable = true;
+        div.innerHTML = `
+          <div class="flex items-start justify-between">
+            <span>${text}</span>
+            <button onclick="insertSuggestion('internDesc', ${index})" class="ml-2 text-blue-600 hover:text-blue-800">
+              <i class="fas fa-plus-circle"></i>
+            </button>
+          </div>
+        `;
+        div.dataset.text = text;
+        div.ondragstart = e => {
+          e.dataTransfer.setData("text/plain", text);
+          e.target.classList.add('opacity-50');
+        };
+        div.ondragend = e => {
+          e.target.classList.remove('opacity-50');
+        };
+        container.appendChild(div);
+      });
+      
+      setupDroppableAreas();
+    };
+  
+    const generateJobDescription = () => {
+      const company = document.getElementById('companyName').value.trim() || 'company';
+      const role = document.getElementById('jobRole').value.trim() || 'role';
+      
+      const suggestions = [
+        `At ${company}, served as ${role} responsible for [key responsibility]. Achieved [quantifiable result] by implementing [solution]. Collaborated with [teams/departments] to [outcome].`,
+        `As ${role} at ${company}, led [project/initiative] that resulted in [positive outcome]. Technologies used included [tech1], [tech2], and [tech3]. Mentored [number] junior team members.`,
+        `In my role as ${role} with ${company}, designed and implemented [system/feature] that improved [metric] by [percentage]. Worked closely with [stakeholders] to ensure [goal].`
+      ];
+      
+      const container = document.getElementById('jobDescSuggestions');
+      container.innerHTML = '';
+      
+      suggestions.forEach((text, index) => {
+        const div = document.createElement('div');
+        div.className = 'p-3 bg-gray-100 rounded-lg border border-gray-200 draggable-item cursor-move';
+        div.draggable = true;
+        div.innerHTML = `
+          <div class="flex items-start justify-between">
+            <span>${text}</span>
+            <button onclick="insertSuggestion('jobDesc', ${index})" class="ml-2 text-blue-600 hover:text-blue-800">
+              <i class="fas fa-plus-circle"></i>
+            </button>
+          </div>
+        `;
+        div.dataset.text = text;
+        div.ondragstart = e => {
+          e.dataTransfer.setData("text/plain", text);
+          e.target.classList.add('opacity-50');
+        };
+        div.ondragend = e => {
+          e.target.classList.remove('opacity-50');
+        };
+        container.appendChild(div);
+      });
+      
+      setupDroppableAreas();
+    };
+  
+    const addExperience = () => {
+      const level = document.getElementById('experienceLevel').value;
+      let exp;
+      
+      if (level === 'entry') {
+        const title = document.getElementById('internTitle').value.trim();
+        const org = document.getElementById('internOrg').value.trim();
+        const start = document.getElementById('internStart').value;
+        const end = document.getElementById('internEnd').value;
+        const desc = document.getElementById('internDesc').value.trim();
+        
+        if (!title || !org || !desc) {
+          alert('Please fill in all required internship fields');
+          return;
+        }
+        
+        exp = {
+          type: 'internship',
+          title,
+          organization: org,
+          startDate: start,
+          endDate: end,
+          description: desc
+        };
+      } else {
+        const company = document.getElementById('companyName').value.trim();
+        const role = document.getElementById('jobRole').value.trim();
+        const start = document.getElementById('jobStart').value;
+        const end = document.getElementById('jobEnd').value;
+        const desc = document.getElementById('jobDesc').value.trim();
+        
+        if (!company || !role || !desc) {
+          alert('Please fill in all required experience fields');
+          return;
+        }
+        
+        exp = {
+          type: 'job',
+          company,
+          role,
+          startDate: start,
+          endDate: end,
+          description: desc
+        };
+      }
+      
+      experience.push(exp);
+      renderExperience();
+      
+      // Clear form
+      if (level === 'entry') {
+        document.getElementById('internTitle').value = '';
+        document.getElementById('internOrg').value = '';
+        document.getElementById('internStart').value = '';
+        document.getElementById('internEnd').value = '';
+        document.getElementById('internDesc').value = '';
+      } else {
+        document.getElementById('companyName').value = '';
+        document.getElementById('jobRole').value = '';
+        document.getElementById('jobStart').value = '';
+        document.getElementById('jobEnd').value = '';
+        document.getElementById('jobDesc').value = '';
+      }
+      
+      // Update local storage
+      const data = initializeData();
+      data.experience = [...experience];
+      localStorage.setItem('resumeData', JSON.stringify(data));
+    };
+  
+    const renderExperience = () => {
+      const container = document.getElementById('savedExperiences');
+      container.innerHTML = '';
+      
+      if (experience.length === 0) {
+        container.innerHTML = '<p class="py-4 text-center text-gray-500">No experience saved yet</p>';
+        return;
+      }
+      
+      experience.forEach((exp, index) => {
+        const expDiv = document.createElement('div');
+        expDiv.className = 'p-4 bg-white rounded-lg border border-gray-200 shadow-sm';
+        
+        if (exp.type === 'internship') {
+          expDiv.innerHTML = `
+            <div class="flex items-start justify-between mb-2">
+              <h4 class="text-lg font-bold">${exp.title}</h4>
+              <button onclick="removeExperience(${index})" class="text-red-500 hover:text-red-700">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+            <div class="mb-2 text-sm text-gray-600">
+              <span class="font-medium">${exp.organization}</span>
+              <span class="mx-2">•</span>
+              <span>${formatDateRange(exp.startDate, exp.endDate)}</span>
+            </div>
+            <div class="text-gray-700 whitespace-pre-line">${exp.description}</div>
+          `;
+        } else {
+          expDiv.innerHTML = `
+            <div class="flex items-start justify-between mb-2">
+              <h4 class="text-lg font-bold">${exp.role}</h4>
+              <button onclick="removeExperience(${index})" class="text-red-500 hover:text-red-700">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+            <div class="mb-2 text-sm text-gray-600">
+              <span class="font-medium">${exp.company}</span>
+              <span class="mx-2">•</span>
+              <span>${formatDateRange(exp.startDate, exp.endDate)}</span>
+            </div>
+            <div class="text-gray-700 whitespace-pre-line">${exp.description}</div>
+          `;
+        }
+        
+        container.appendChild(expDiv);
+      });
+    };
+  
+    const removeExperience = (index) => {
+      experience.splice(index, 1);
+      renderExperience();
+      
+      const data = initializeData();
+      data.experience = [...experience];
+      localStorage.setItem('resumeData', JSON.stringify(data));
+    };
+  
+    // ========== UTILITY FUNCTIONS ==========
+    const formatDateRange = (start, end) => {
+      if (!start) return '';
+      
+      const startDate = new Date(start);
+      const startStr = startDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+      
+      if (!end) return `${startStr} - Present`;
+      
+      const endDate = new Date(end);
+      const endStr = endDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+      
+      return `${startStr} - ${endStr}`;
+    };
+  
+    const setupDroppableAreas = () => {
+      document.querySelectorAll('.droppable-area').forEach(area => {
+        area.addEventListener('dragover', e => {
+          e.preventDefault();
+          area.classList.add('droppable-area--drag-over');
+        });
+        
+        area.addEventListener('dragleave', () => {
+          area.classList.remove('droppable-area--drag-over');
+        });
+        
+        area.addEventListener('drop', e => {
+          e.preventDefault();
+          area.classList.remove('droppable-area--drag-over');
+          const text = e.dataTransfer.getData('text/plain');
+          area.value = area.value ? area.value + '\n\n' + text : text;
+          
+          // Save to local storage based on which textarea it is
+          const id = area.id;
+          if (id === 'summaryInput') saveToLocalStorage('summary', area.value);
+          else if (id === 'eduAchievements') saveToLocalStorage('education.achievements', area.value);
+          else if (id === 'projDesc') saveToLocalStorage('projects.current.description', area.value);
+          else if (id === 'internDesc') saveToLocalStorage('experience.internship.description', area.value);
+          else if (id === 'jobDesc') saveToLocalStorage('experience.current.description', area.value);
+        });
+      });
+    };
+  
+    // ========== INITIAL SETUP ==========
+    document.addEventListener('DOMContentLoaded', () => {
+      // Load saved data
+      loadFromLocalStorage();
+      
+      // Set up event listeners for auto-saving
+      document.getElementById('roleInput').addEventListener('change', (e) => {
+        saveToLocalStorage('role', e.target.value);
+        generateRoleBasedSkills();
+      });
+      
+      document.getElementById('summaryInput').addEventListener('change', (e) => {
+        saveToLocalStorage('summary', e.target.value);
+      });
+      
+      // Education fields
+      document.getElementById('eduInstitution').addEventListener('change', (e) => {
+        saveToLocalStorage('education.institution', e.target.value);
+      });
+      
+      document.getElementById('eduDegree').addEventListener('change', (e) => {
+        saveToLocalStorage('education.degree', e.target.value);
+      });
+      
+      document.getElementById('eduStatus').addEventListener('change', (e) => {
+        saveToLocalStorage('education.status', e.target.value);
+        toggleEduEndDate();
+      });
+      
+      document.getElementById('eduEndDate').addEventListener('change', (e) => {
+        saveToLocalStorage('education.endDate', e.target.value);
+      });
+      
+      document.getElementById('eduAchievements').addEventListener('change', (e) => {
+        saveToLocalStorage('education.achievements', e.target.value);
+      });
+      
+      // Project fields
+      document.getElementById('projName').addEventListener('change', (e) => {
+        saveToLocalStorage('projects.current.name', e.target.value);
+      });
+      
+      document.getElementById('projDomain').addEventListener('change', (e) => {
+        saveToLocalStorage('projects.current.domain', e.target.value);
+      });
+      
+      document.getElementById('projRole').addEventListener('change', (e) => {
+        saveToLocalStorage('projects.current.role', e.target.value);
+      });
+      
+      document.getElementById('projDesc').addEventListener('change', (e) => {
+        saveToLocalStorage('projects.current.description', e.target.value);
+      });
+      
+      // Experience fields
+      document.getElementById('experienceLevel').addEventListener('change', (e) => {
+        saveToLocalStorage('experience.level', e.target.value);
+        handleExperienceChange();
+      });
+      
+      // Internship fields
+      document.getElementById('internTitle').addEventListener('change', (e) => {
+        saveToLocalStorage('experience.internship.title', e.target.value);
+      });
+      
+      document.getElementById('internOrg').addEventListener('change', (e) => {
+        saveToLocalStorage('experience.internship.organization', e.target.value);
+      });
+      
+      document.getElementById('internStart').addEventListener('change', (e) => {
+        saveToLocalStorage('experience.internship.startDate', e.target.value);
+      });
+      
+      document.getElementById('internEnd').addEventListener('change', (e) => {
+        saveToLocalStorage('experience.internship.endDate', e.target.value);
+      });
+      
+      document.getElementById('internDesc').addEventListener('change', (e) => {
+        saveToLocalStorage('experience.internship.description', e.target.value);
+      });
+      
+      // Job fields
+      document.getElementById('companyName').addEventListener('change', (e) => {
+        saveToLocalStorage('experience.current.company', e.target.value);
+      });
+      
+      document.getElementById('jobRole').addEventListener('change', (e) => {
+        saveToLocalStorage('experience.current.role', e.target.value);
+      });
+      
+      document.getElementById('jobStart').addEventListener('change', (e) => {
+        saveToLocalStorage('experience.current.startDate', e.target.value);
+      });
+      
+      document.getElementById('jobEnd').addEventListener('change', (e) => {
+        saveToLocalStorage('experience.current.endDate', e.target.value);
+      });
+      
+      document.getElementById('jobDesc').addEventListener('change', (e) => {
+        saveToLocalStorage('experience.current.description', e.target.value);
+      });
+      
+      // Set up drag and drop
+      setupDroppableAreas();
+      
+      // Generate initial skill suggestions based on role
+      if (document.getElementById('roleInput').value) {
+        generateRoleBasedSkills();
+      }
+    });
+  </script>
+</body>
+</html>

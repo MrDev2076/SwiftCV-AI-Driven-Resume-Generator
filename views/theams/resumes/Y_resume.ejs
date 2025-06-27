@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SwiftCv - Resume Builder</title>
+  <link rel="icon" href="https://novoresume.com/images/media_kit/colorful-simple-logo.png " />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  
+  <style>
+    .index{
+      background-image: linear-gradient(to top, #f5fafd 0%, #f8f5e2 100%);
+      background-size: cover;
+    }
+ 
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #resume-container, #resume-container * {
+                visibility: visible;
+            }
+            #resume-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-dark index">
+    <div class="">
+    <!-- Navbar -->
+    <nav class="p-4 bg-blue-900 shadow-md">
+      <div class="flex items-center justify-between max-w-screen-xl px-16 mx-auto">
+        <h1 class="text-2xl font-semibold text-white"><a href="/" class="text-white">SwiftCv - Resume Builder</a></h1>
+        <div class="flex space-x-4">
+          <a href="/" class="px-4 py-2 text-sm text-white duration-300 ease-in-out rounded hover:bg-yellow-500">Home</a>
+            
+          <a href="/profile" class="px-4 py-2 text-sm text-white duration-300 ease-in-out rounded hover:bg-yellow-500">Profile</a>
+            <% if (user && user.role !== 'user') { %>  
+            <a href="/admin" class="px-4 py-2 text-sm text-white duration-300 ease-in-out border-b rounded hover:text-yellow-400">⚡Admin Dashboard </a>
+         <% } %>
+          <a href="/logout" class="px-4 py-2 text-sm text-white duration-300 ease-in-out rounded hover:bg-yellow-500">Logout</a>
+        </div>
+      </div>
+    </nav>
+    <h1 class="mt-4 text-2xl font-bold text-center text-yellow-600 ">Explore our Yellow Theam</h1>
+   
+    <!-- 🔷 Container for Form & Resume Preview Side by Side -->
+    <div class="flex w-full max-w-6xl gap-6 mx-auto mt-10 border-t border-gray-800">
+        
+        <!-- 📝 Form for Resume Input -->
+        <form id="resume-form" class="w-1/2 p-6 mt-4 bg-white rounded-lg shadow-md">
+            <h2 class="mb-4 text-xl font-bold">Fill Your Details</h2>
+            
+            <label class="block">Profile Picture</label>
+            <input type="file" id="profile-pic-input" class="mb-3">
+
+            <label class="block">Name</label>
+            <input type="text" name="name" class="w-full p-2 mb-3 border" >
+
+            <label class="block">Job Title</label>
+            <input type="text" name="job-title" class="w-full p-2 mb-3 border" >
+
+            <label class="block">Location</label>
+            <input type="text" name="location" class="w-full p-2 mb-3 border">
+
+            <label class="block">Email</label>
+            <input type="email" name="email" class="w-full p-2 mb-3 border">
+
+            <label class="block">LinkedIn</label>
+            <input type="text" name="linkedin" class="w-full p-2 mb-3 border">
+
+            <label class="block">Phone</label>
+            <input type="text" name="phone" class="w-full p-2 mb-3 border">
+
+            <label class="block">Professional Summary</label>
+            <textarea name="summary" class="w-full p-2 mb-3 border"></textarea>
+
+            <label class="block">Experience</label>
+            <textarea name="experience" class="w-full p-2 mb-3 border"></textarea>
+
+            <label class="block">Education</label>
+            <textarea name="education" class="w-full p-2 mb-3 border"></textarea>
+
+            <label class="block">Projects</label>
+            <textarea name="projects" class="w-full p-2 mb-3 border"></textarea>
+
+            <label class="block">Skills</label>
+            <textarea name="skills" class="w-full p-2 mb-3 border"></textarea>
+
+            <label class="block">Certifications</label>
+            <textarea name="certifications" class="w-full p-2 mb-3 border"></textarea>
+
+            <button type="submit" class="px-4 py-2 text-white bg-yellow-500 rounded">Generate Resume</button>
+        </form>
+
+        <!-- 🎨 Resume Preview (Initially Hidden) -->
+        <div id="resume-container" class="w-1/2 p-6 mt-4 bg-white border border-gray-300 rounded-lg shadow-lg ">
+            <div class="grid grid-cols-5">
+                
+                <!-- Sidebar -->
+                <aside class="col-span-2 p-6 text-white bg-gradient-to-b from-white to-yellow-800">
+                  <img id="profile-pic-preview" src="https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg" class="w-32 h-32 my-4 border-4 border-white rounded-full shadow-2xl" alt="Profile Picture">
+                    
+                  <h1 id="display-name" class="mt-2 text-2xl font-bold text-yellow-900 font-monospace">John Doe</h1>
+                  <p id="display-job-title" class="text-lg font-semibold text-yellow-700 border-b">Software Developer</p>
+                  <p id="display-location" class="text-md">📍 Location</p>
+                  <p id="display-email" class="text-md">📧 Email</p>
+                  <p id="display-linkedin" class="text-md">🔗 LinkedIn</p>
+                  <p id="display-phone" class="text-md">📞 Phone</p>
+
+                  <h2 class="mt-4 text-lg font-semibold border-b">Skills</h2>
+                  <p id="display-skills" class="text-gray-200">
+                      Programming Languages: Java, Python, JavaScript
+                      Web Development: React.js, Node.js, Express.js
+                      Databases: MySQL, MongoDB, PostgreSQL
+                      Cloud Platforms: AWS, Azure
+                      DevOps: Docker, Kubernetes, CI/CD Pipelines
+                      Testing: Selenium, JUnit, Cypress
+                      Tools: Git, Jenkins, Postman
+                  </p>
+
+                  <h2 class="mt-4 text-lg font-semibold border-b">Certifications</h2>
+                  <p id="display-certifications" class="text-gray-200">
+                      AWS Certified Solutions Architect – Associate
+                      Oracle Certified Java Programmer (OCJP)
+                      Microsoft Certified: Azure Fundamentals
+                      Certified Scrum Master (CSM)
+                  </p>
+              </aside>
+
+              <!-- Main Content -->
+              <main class="col-span-3 p-6">
+                  <h2 class="text-xl font-semibold text-yellow-700">Professional Summary</h2>
+                  <p id="display-summary" class="text-gray-700">
+                      Results-driven Software Developer with 5+ years of experience in designing, developing, and deploying scalable web applications. Strong expertise in full-stack development, cloud computing, and Agile methodologies. Passionate about solving complex problems and improving software efficiency through optimized algorithms and clean code.
+                  </p>
+
+                  <h2 class="mt-4 text-xl font-semibold text-yellow-700">Experience</h2>
+                  <p id="display-experience" class="text-gray-700">
+                      Software Developer | XYZ Technologies | Jan 2020 – Present
+                          Developed and deployed RESTful APIs using Node.js and Express.js.
+                          Optimized database queries, improving performance by 40%.
+                      Software Engineer | ABC Corp | June 2017 – Dec 2019
+                          Built microservices-based architecture using Spring Boot and MongoDB.
+                          Enhanced UI/UX for customer-facing applications using React and Redux.
+                  </p>
+
+                  <h2 class="mt-4 text-xl font-semibold text-yellow-700">Education</h2>
+                  <p id="display-education" class="text-gray-700">
+                      🎓 Master of Technology (B.Tech) in Computer Science
+                          ABC University, 2020 – 2022 
+                      🎓 Bachelor of Technology (B.Tech) in Computer Science
+                          ABC University, 2016 – 2020 
+                  </p>
+
+                  <h2 class="mt-4 text-xl font-semibold text-yellow-700">Projects</h2>
+                  <p id="display-projects" class="text-gray-700">
+                      1. SwiftCV – AI Resume Generator (MERN Stack)
+                          Developed an AI-powered resume generator with role-based authentication.
+                      2. Train Ticket Booking System (Java, MySQL, JDBC)
+                          Built a ticket booking system with features for reservation, cancellation, and payment processing.
+                      3. Business Analytics Dashboard (Power BI, SQL, Python)
+                          Designed an interactive Power BI dashboard for sales insights.
+                  </p>
+                </main>
+            </div>
+
+            <button id="print-button" class="px-4 py-2 mt-4 text-white bg-green-500 rounded">Print Resume</button>
+        </div>
+
+    </div>
+
+    <footer class="py-6 text-white bg-gray-900">
+        <div class="container flex flex-col items-center justify-between px-6 mx-auto md:flex-row">
+          <p class="text-sm">&copy; 2025 SwiftCV. All rights reserved.</p>
+          <div class="flex mt-4 space-x-4 md:mt-0">
+            <a href="#" class="transition hover:text-blue-400">Privacy Policy</a>
+            <a href="#" class="transition hover:text-blue-400">Terms of Service</a>
+            <a href="#" class="transition hover:text-blue-400">Contact</a>
+          </div>
+        </div>
+      </footer>
+    
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.3/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const profilePicInput = document.getElementById("profile-pic-input");
+    const profilePicPreview = document.getElementById("profile-pic-preview");
+    const form = document.getElementById("resume-form");
+    const resumeContainer = document.getElementById("resume-container");
+    const printButton = document.getElementById("print-button");
+
+    // Function to initialize CKEditor for textareas
+    async function TextEditor(element) {
+        return ClassicEditor.create(element, {
+            toolbar: ['heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote']
+        });
+    }
+
+    // Initialize CKEditor for specific fields
+    let Experience, Education, Projects, Skills, Certifications;
+
+    TextEditor(document.querySelector('[name="experience"]')).then(editor => { Experience = editor; });
+    TextEditor(document.querySelector('[name="education"]')).then(editor => { Education = editor; });
+    TextEditor(document.querySelector('[name="projects"]')).then(editor => { Projects = editor; });
+    TextEditor(document.querySelector('[name="skills"]')).then(editor => { Skills = editor; });
+    TextEditor(document.querySelector('[name="certifications"]')).then(editor => { Certifications = editor; });
+
+    // Handle Profile Picture Upload
+    profilePicInput.addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                profilePicPreview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Handle Form Submission & Prevent Page Reload
+    form.addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent default form submission behavior
+
+        const formData = new FormData(form);
+
+        document.getElementById("display-name").textContent = formData.get("name");
+        document.getElementById("display-job-title").textContent = formData.get("job-title");
+        document.getElementById("display-location").textContent = "📍 " + formData.get("location");
+        document.getElementById("display-email").textContent = "📧 " + formData.get("email");
+        document.getElementById("display-linkedin").textContent = "🔗 " + formData.get("linkedin");
+        document.getElementById("display-phone").textContent = "📞 " + formData.get("phone");
+
+        document.getElementById("display-summary").innerHTML = formData.get("summary");
+        document.getElementById("display-experience").innerHTML = Experience.getData();
+        document.getElementById("display-education").innerHTML = Education.getData();
+        document.getElementById("display-projects").innerHTML = Projects.getData();
+        document.getElementById("display-skills").innerHTML = Skills.getData();
+        document.getElementById("display-certifications").innerHTML = Certifications.getData();
+
+        // Show resume section
+        resumeContainer.style.display = "block";
+
+        // Smooth scroll to resume preview
+        resumeContainer.scrollIntoView({ behavior: "smooth" });
+    });
+
+    printButton.addEventListener("click", function () {
+        window.print();
+    });
+});
+
+    </script>
+</body>
+</html>
